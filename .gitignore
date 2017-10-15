@@ -1,0 +1,9 @@
+# crawled data
+/preprocess/crawled.json
+
+# data
+/main/preprocess/*.pkl
+
+# python cache
+*.pyc
+
