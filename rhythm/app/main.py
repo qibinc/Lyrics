@@ -31,7 +31,6 @@ answer_page = '''
 @app.route('/')
 def hello_world():
     line = request.args.get('line')
-    print(line)
     try:
         num = int(request.args.get('num'))
     except:
@@ -43,4 +42,4 @@ def hello_world():
         return answer_page % (line, str(rhythm.predict_phrase_2gram(line, num)), str(rhythm.predict_phrase_embedding(line, num)))
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0')
+  app.run(host='0.0.0.0', port=80)
