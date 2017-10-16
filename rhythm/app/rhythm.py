@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
 # ## Meaning satisfying rhythm
 
-# In[2]:
+# In[5]:
 
 
 def all_rhyme(word_x, word_y):
@@ -106,25 +106,34 @@ def all_rhyme(word_x, word_y):
     return False
 
 
-# In[315]:
+# In[47]:
 
 
 model = Word2Vec.load('word2vec_model')
 cut = thulac.thulac(seg_only=True)
+
+def word2finals(word):
+    return [li[0] for li in pypinyin.pinyin(word, style=pypinyin.Style.FINALS)]
+
+finals2word = {}
+for word in model.wv.vocab.keys():
+    finals2word.setdefault(''.join(word2finals(word)),[]).append(word)
 
 def predict_phrase_embedding(line, num_view=20):
     words = list(zip(*cut.cut(line)))[0]
     d = {}
     for word in words:
         try:
-            d[word] = [candidate for candidate in list(zip(*model.most_similar(word, topn=len(model.wv.vocab))))[0]                       if all_rhyme(candidate, word)][:num_view]
+            candidate_list = np.array(finals2word[''.join(word2finals(word))])
+            candidate_similarity = list(map(lambda candidate: model.similarity(candidate, word), candidate_list))
+            d[word] = list(candidate_list[np.argsort(candidate_similarity)[::-1][:num_view]])
         except Exception:
             d[word] = []
             
     return d
 
 
-# In[316]:
+# In[49]:
 
 
 if __name__ == '__main__':
