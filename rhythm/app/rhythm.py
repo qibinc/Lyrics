@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[14]:
+# In[1]:
 
 
 import json
@@ -13,7 +13,7 @@ import thulac
 
 # ## Load
 
-# In[15]:
+# In[2]:
 
 
 print('Loading...')
@@ -28,12 +28,16 @@ for key in characterFrequency:
     characterFrequency[''] += characterFrequency[key]
 characterFrequency.update(tupleCharacterFrequency)
 
+with_prev_freq = [np.array(        [ float(characterFrequency.get(prev + char, 0)) / characterFrequency.get(prev, 1) for prev in characters ])
+                 for char in characters]
+
+
 print('Loading complete!')
 
 
 # ## 2-gram
 
-# In[16]:
+# In[3]:
 
 
 def predict_phrase_2gram(line, num_view=20):
@@ -56,12 +60,10 @@ def predict_phrase_2gram(line, num_view=20):
 
     for k in range(1, phrase_length):
         for idx, char in enumerate(characters):
-            if char_finals[idx] == finals[k]:
-                with_prev_freq = np.array(                        [ float(characterFrequency.get(prev + char, 0)) / characterFrequency.get(prev, 1) for prev in characters ])
-                
-                probability[k][idx] = np.max(probability[k - 1] * with_prev_freq)
+            if char_finals[idx] == finals[k]:                
+                probability[k][idx] = np.max(probability[k - 1] * with_prev_freq[idx])
                 if probability[k][idx] > 0:
-                    path[k][idx] = np.argmax(probability[k - 1] * with_prev_freq)
+                    path[k][idx] = np.argmax(probability[k - 1] * with_prev_freq[idx])
     
     def path2phrase(k, idx):
         phrase = ''
@@ -75,7 +77,7 @@ def predict_phrase_2gram(line, num_view=20):
     return [path2phrase(phrase_length - 1, idx)            for idx in np.argsort(probability[phrase_length - 1])[::-1][:num_view]            if probability[phrase_length - 1][idx] > 0]
 
 
-# In[17]:
+# In[5]:
 
 
 if __name__ == '__main__':
