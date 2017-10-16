@@ -106,7 +106,7 @@ def all_rhyme(word_x, word_y):
     return False
 
 
-# In[47]:
+# In[50]:
 
 
 model = Word2Vec.load('word2vec_model')
@@ -117,23 +117,23 @@ def word2finals(word):
 
 finals2word = {}
 for word in model.wv.vocab.keys():
-    finals2word.setdefault(''.join(word2finals(word)),[]).append(word)
+    finals2word.setdefault(' '.join(word2finals(word)),[]).append(word)
 
 def predict_phrase_embedding(line, num_view=20):
     words = list(zip(*cut.cut(line)))[0]
     d = {}
     for word in words:
         try:
-            candidate_list = np.array(finals2word[''.join(word2finals(word))])
+            candidate_list = np.array(finals2word[' '.join(word2finals(word))])
             candidate_similarity = list(map(lambda candidate: model.similarity(candidate, word), candidate_list))
-            d[word] = list(candidate_list[np.argsort(candidate_similarity)[::-1][:num_view]])
+            d[word] = list(candidate_list[np.argsort(candidate_similarity)[::-1][:num_view]])[1:]
         except Exception:
             d[word] = []
             
     return d
 
 
-# In[49]:
+# In[53]:
 
 
 if __name__ == '__main__':
