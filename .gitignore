@@ -7,3 +7,8 @@
 # python cache
 *.pyc
 
+# jupyter
+**/.ipynb_checkpoints/
+
+# idea
+**/.idea/

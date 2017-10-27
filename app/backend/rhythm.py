@@ -18,11 +18,11 @@ import thulac
 
 print('Loading...')
 
-characterFrequency = json.load(open('singleCharacterFrequency.json', 'r'))
+characterFrequency = json.load(open('../../rhythm/singleCharacterFrequency.json', 'r'))
 characters = list(characterFrequency.keys())
 char_finals = [ pypinyin.pinyin(char, style=pypinyin.Style.FINALS)[0][0] for char in characters]
 char_initials = [ pypinyin.pinyin(char, style=pypinyin.Style.INITIALS)[0][0] for char in characters]
-tupleCharacterFrequency = json.load(open('tupleCharacterFrequency.json', 'r'))
+tupleCharacterFrequency = json.load(open('../../rhythm/tupleCharacterFrequency.json', 'r'))
 characterFrequency[''] = 0
 for key in characterFrequency:
     characterFrequency[''] += characterFrequency[key]
@@ -109,7 +109,7 @@ def all_rhyme(word_x, word_y):
 # In[50]:
 
 
-model = Word2Vec.load('word2vec_model')
+model = Word2Vec.load('../../rhythm/word2vec_model')
 cut = thulac.thulac(seg_only=True)
 
 def word2finals(word):
