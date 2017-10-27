@@ -1,33 +1,30 @@
-import rhythm
 from flask import Flask
-from flask import request
+from flask import request, jsonify
+from flask_cors import CORS
+import rhythm
+import seq2seq
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/word')
 def generate_word():
-    line = request.args.get('line')
-    try:
-        num = int(request.args.get('num'))
-    except:
-        num = None
-    print(line, num)
-    if num == None:
-        return str(rhythm.predict_phrase_2gram(line)) + str(rhythm.predict_phrase_embedding(line))
-    else:
-        return str(rhythm.predict_phrase_2gram(line, num)) + str(rhythm.predict_phrase_embedding(line, num))
+    line = request.args.get('line').strip()
+    if line == '': return jsonify([])
+    ans = rhythm.predict_phrase_embedding(line, 100)
+    ans = list(ans.values())[0]
+    if ans == []:
+        ans = rhythm.predict_phrase_2gram(line, 100)
+    print(line, ans)
+    return jsonify(ans)
 
-@app.route('/sentence')
+@app.route('/seq2seq')
 def generate_sentence():
-    line = request.args.get('line')
-    try:
-        num = int(request.args.get('num'))
-    except:
-        num = None
-    if num == None:
-        return (line, str(rhythm.predict_phrase_2gram(line)), str(rhythm.predict_phrase_embedding(line)))
-    else:
-        return (line, str(rhythm.predict_phrase_2gram(line, num)), str(rhythm.predict_phrase_embedding(line, num)))
+    line = request.args.get('line').strip()
+    if line == '': return jsonify([])
+    ans = seq2seq.predict(line)
+    print(line, ans)
+    return jsonify(ans)
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=80)
+  app.run(host='0.0.0.0', port=8001)

@@ -6,14 +6,14 @@ import Paper from 'material-ui/Paper';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
+import Word from './Word';
+import Seq2Seq from './Seq2Seq';
 
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        overflow: "hidden",
         textAlign: "center",
-        //marginTop: 64,
-
+        padding: theme.spacing.unit * 3,
     },
     flex: {
         flex: 1,
@@ -21,6 +21,7 @@ const styles = theme => ({
     paper: {
         textAlign: 'center',
         color: theme.palette.text.secondary,
+        marginTop: theme.spacing.unit * 3,
     },
 });
 
@@ -34,7 +35,7 @@ class App extends Component
 
         return (
             <div className={classes.root}>
-                <AppBar className={classes.appbar} position="static" color="default">
+                <AppBar className={classes.appbar} position="static" >
                     <Toolbar>
                         <Typography className={classes.flex} type="title" color="inherit">
                             Deep Lyrics
@@ -42,8 +43,14 @@ class App extends Component
                     </Toolbar>
                 </AppBar>
                 <Grid container className={classes.container}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={12}>
                         <Paper className={classes.paper}>
+                            <Word/>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                        <Paper className={classes.paper}>
+                            <Seq2Seq/>
                         </Paper>
                     </Grid>
                 </Grid>
