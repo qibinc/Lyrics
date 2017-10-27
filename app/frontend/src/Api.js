@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { WORD, SEQ2SEQ } from './config';
+import { URL, WORD, SEQ2SEQ } from './config';
 
 export function queryWord(query) {
     return axios
-        .get(WORD, {
+        .get(URL + WORD, {
             params: {
                 line: query
             }
@@ -15,7 +15,7 @@ export function queryWord(query) {
 
 export function querySeq2Seq(query) {
     return axios
-        .get(SEQ2SEQ, {
+        .get(URL + SEQ2SEQ, {
             params: {
                 line: query.split('，').join(',')
             }

@@ -1,3 +1,3 @@
-export const URL = "http://127.0.0.1:8000";
-export const WORD = "http://127.0.0.1:8001/word";
-export const SEQ2SEQ = "http://127.0.0.1:8001/seq2seq";
+export const URL = "http://thulyrics.eastasia.cloudapp.azure.com:8000";
+export const WORD = "/word";
+export const SEQ2SEQ = "/seq2seq";
