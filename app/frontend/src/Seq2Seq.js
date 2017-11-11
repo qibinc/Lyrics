@@ -62,8 +62,6 @@ class Seq2Seq extends Component {
             .then(response => {
                 let prepareData = [];
                 for (let idx in response) {
-                    if (idx == 100)
-                        break;
                     prepareData.push({key: idx, label: response[idx]});
                 }
                 this.setState({disabled: false, chipData: prepareData})
