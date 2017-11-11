@@ -52,8 +52,6 @@ use_cuda = torch.cuda.is_available()
 
 model = Word2Vec.load('../../seq2seq/saved/word2vec_model')
 
-print(model.most_similar('河流'))
-
 
 # In[4]:
 
@@ -146,7 +144,7 @@ def prepareData():
 
 
 vocab, pairs = prepareData()
-print(random.choice(pairs))
+#print(random.choice(pairs))
 
 
 # The Seq2Seq Model
@@ -602,8 +600,8 @@ def trainIters(encoder, decoder, n_iters, print_every=1000, plot_every=100, lear
 # In[17]:
 
 
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
+#import matplotlib.pyplot as plt
+#import matplotlib.ticker as ticker
 import numpy as np
 
 
@@ -735,12 +733,12 @@ def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH, beam_width=30):
 def evaluateRandomly(encoder, decoder, n=5, beam_width=30, show=5):
     for i in range(n):
         pair = random.choice(pairs)
-        print('>', pair[0])
-        print('=', pair[1])
+        #print('>', pair[0])
+        #print('=', pair[1])
         output_sentences, attentions = evaluate(encoder, decoder, pair[0], beam_width=beam_width)
-        for j in range(min(len(output_sentences), show)):
-            print('<', output_sentences[j])
-        print()
+        #for j in range(min(len(output_sentences), show)):
+        #    print('<', output_sentences[j])
+        #print()
 
 
 # Training and Evaluating
@@ -795,7 +793,7 @@ attn_decoder1.load_state_dict(torch.load('../../seq2seq/saved/attn_decoder.param
 # In[31]:
 
 
-evaluateRandomly(encoder1, attn_decoder1, beam_width=30)
+#evaluateRandomly(encoder1, attn_decoder1, beam_width=30)
 
 
 # In[ ]:
