@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>utils.doc &mdash; Deep Lyrics  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Deep Lyrics  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Deep Lyrics
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic.html">topic package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocess.html">preprocess package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Deep Lyrics</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>utils.doc</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for utils.doc</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">gensim.models</span> <span class="k">import</span> <span class="n">Word2Vec</span>
+<span class="kn">import</span> <span class="nn">thulac</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="k">import</span> <span class="n">CountVectorizer</span><span class="p">,</span> <span class="n">TfidfVectorizer</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">path_saved</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;../saved&#39;</span><span class="p">)</span>
+<span class="n">path_word2vec_model</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_saved</span><span class="p">,</span> <span class="s1">&#39;word2vec_model&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Doc"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc">[docs]</a><span class="k">class</span> <span class="nc">Doc</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Operate lyrics.</span>
+
+<span class="sd">    Use Doc.load_corpus(lyrics) to initialize the corpus</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Word2Vec</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_word2vec_model</span><span class="p">)</span>
+    <span class="n">cut</span> <span class="o">=</span> <span class="n">thulac</span><span class="o">.</span><span class="n">thulac</span><span class="p">(</span><span class="n">seg_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1">#只进行分词，不进行词性标注\n&quot;</span>
+
+    <span class="n">corpus</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">filter_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+    <span class="n">hierarchy</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lyric</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s1">&#39;word&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Tokenize a string and store as bag of words.</span>
+
+<span class="sd">        Keyword arguments:</span>
+<span class="sd">        lyric -- A piece of lyric, list of sentence</span>
+<span class="sd">        depth -- The hierarchy of the doc</span>
+<span class="sd">        tokenizer -- the tokenizer(char/word)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="n">lyric</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">Doc</span><span class="p">(</span><span class="n">lyric</span><span class="o">=</span><span class="n">line</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>\
+                     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">hierarchy</span><span class="p">[</span><span class="n">depth</span><span class="p">])]</span>\
+                <span class="k">if</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">hierarchy</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">if</span> <span class="n">tokenizer</span> <span class="o">==</span> <span class="s1">&#39;char&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tokenizer</span> <span class="o">==</span> <span class="s1">&#39;word&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">Doc</span><span class="o">.</span><span class="n">cut</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">)))[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">filter_list</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">bag</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bag</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Doc.load_corpus"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.load_corpus">[docs]</a>    <span class="k">def</span> <span class="nf">load_corpus</span><span class="p">(</span><span class="n">lyrics</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s1">&#39;word&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Load from lyrics read by data.read_filtered()</span>
+
+<span class="sd">        tokenizer: char / word</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">Doc</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">lyric</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lyrics</span><span class="p">):</span>
+            <span class="n">new_doc</span> <span class="o">=</span> <span class="n">Doc</span><span class="p">(</span><span class="n">lyric</span><span class="o">=</span><span class="n">lyric</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
+            <span class="n">Doc</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_doc</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">idx</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lyrics</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span><span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loading </span><span class="si">%.2f%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">idx</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">lyrics</span><span class="p">)))</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loading complete&#39;</span><span class="p">)</span>
+        <span class="n">Doc</span><span class="o">.</span><span class="n">filter_corpus</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Doc.filter_corpus"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.filter_corpus">[docs]</a>    <span class="k">def</span> <span class="nf">filter_corpus</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Filtering out frequent and rare words.&#39;</span><span class="p">)</span>
+
+        <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">bag</span><span class="p">)</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">corpus</span><span class="p">]</span>
+        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">max_df</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">)</span>
+        <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">corpus</span><span class="p">:</span>
+            <span class="n">doc</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">vocabulary_</span><span class="p">)</span>
+
+        <span class="n">corpus_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
+        <span class="n">Doc</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">corpus</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">bag</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Complete &#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Vocab size </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">vocabulary_</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Filtered </span><span class="si">%.2f%%</span><span class="s1"> too short.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span> <span class="o">/</span> <span class="n">corpus_size</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="Doc.filter"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vocab</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag</span>\
+                    <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">vocab</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bag</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="n">child</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">vocab</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">child</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">bag</span> <span class="o">!=</span> <span class="p">[]]</span></div>
+
+
+<div class="viewcode-block" id="Doc.to_vec"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.to_vec">[docs]</a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Use pretrained model to get the vector[512] of bag&#39;&#39;&#39;</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">512</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">wv</span><span class="p">:</span>
+                <span class="n">vec</span> <span class="o">+=</span> <span class="n">Doc</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">wv</span><span class="p">[</span><span class="n">word</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+                    <span class="n">vec</span> <span class="o">+=</span> <span class="n">Doc</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">wv</span><span class="p">[</span><span class="n">char</span><span class="p">]</span> <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">wv</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">vec</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">vec</span></div>
+
+<div class="viewcode-block" id="Doc.similarity"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.similarity">[docs]</a>    <span class="k">def</span> <span class="nf">similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc2</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return the cosine distance between two lines.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(),</span> <span class="n">doc2</span><span class="o">.</span><span class="n">to_vec</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Doc.most_similar"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.most_similar">[docs]</a>    <span class="k">def</span> <span class="nf">most_similar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Find the most similar line in the corpus.</span>
+
+<span class="sd">        Similar defined as cosine distance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">most_simi</span><span class="p">,</span> <span class="n">winner</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">corpus</span><span class="p">):</span>
+            <span class="n">simi</span> <span class="o">=</span> <span class="n">Doc</span><span class="o">.</span><span class="n">similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidate</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">simi</span> <span class="o">&gt;</span> <span class="n">most_simi</span> <span class="ow">and</span> <span class="n">candidate</span><span class="o">.</span><span class="n">bag</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag</span><span class="p">:</span>
+                <span class="n">most_simi</span><span class="p">,</span> <span class="n">winner</span> <span class="o">=</span> <span class="n">simi</span><span class="p">,</span> <span class="n">candidate</span>
+
+        <span class="k">if</span> <span class="n">winner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: Nothing in corpus.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">winner</span><span class="o">.</span><span class="n">origin</span></div>
+
+<div class="viewcode-block" id="Doc.test"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.test">[docs]</a>    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+        <span class="sd">&#39;&#39;&#39;Unit test &amp; usage&#39;&#39;&#39;</span>
+        <span class="n">line1</span> <span class="o">=</span> <span class="s1">&#39;天青色等烟雨&#39;</span>
+        <span class="n">doc1</span> <span class="o">=</span> <span class="n">Doc</span><span class="p">(</span><span class="n">line1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tokenized and word vec[:10] of </span><span class="si">%s</span><span class="s1">:&#39;</span> <span class="o">%</span> <span class="n">line1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">doc1</span><span class="o">.</span><span class="n">bag</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">doc1</span><span class="o">.</span><span class="n">to_vec</span><span class="p">()[:</span><span class="mi">10</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Most similar word to 河流&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">most_similar</span><span class="p">(</span><span class="s1">&#39;河流&#39;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">line2</span> <span class="o">=</span> <span class="s1">&#39;而我在等你&#39;</span>
+        <span class="n">doc2</span> <span class="o">=</span> <span class="n">Doc</span><span class="p">(</span><span class="n">line2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Similarity between </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line1</span><span class="p">,</span> <span class="n">line2</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">similarity</span><span class="p">(</span><span class="n">doc1</span><span class="p">,</span> <span class="n">doc2</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Most similar to </span><span class="si">%s</span><span class="s1"> in corpus&#39;</span> <span class="o">%</span> <span class="n">line1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">doc1</span><span class="o">.</span><span class="n">most_similar</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, FIT.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
