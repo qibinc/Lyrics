@@ -10,11 +10,12 @@ Welcome to Deep Lyrics's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   utils
+   topic
+   preprocess
 
 
 Indices and tables
 ==================
 
-* :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

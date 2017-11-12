@@ -4,4 +4,6 @@ Lyrics
 .. toctree::
    :maxdepth: 4
 
-   Lyrics
+   preprocess
+   topic
+   utils

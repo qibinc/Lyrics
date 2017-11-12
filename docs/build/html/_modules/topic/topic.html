@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>topic.topic &mdash; Deep Lyrics  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Deep Lyrics  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Deep Lyrics
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic.html">topic package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocess.html">preprocess package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Deep Lyrics</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>topic.topic</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for topic.topic</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">gensim</span> <span class="k">import</span> <span class="n">corpora</span>
+<span class="kn">import</span> <span class="nn">gensim</span>
+
+
+<div class="viewcode-block" id="lda"><a class="viewcode-back" href="../../topic.html#topic.topic.lda">[docs]</a><span class="k">def</span> <span class="nf">lda</span><span class="p">(</span><span class="n">bags</span><span class="p">,</span> <span class="n">n_topics</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+
+    <span class="n">dictionary</span> <span class="o">=</span> <span class="n">corpora</span><span class="o">.</span><span class="n">Dictionary</span><span class="p">(</span><span class="n">bags</span><span class="p">)</span>
+    <span class="n">corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">dictionary</span><span class="o">.</span><span class="n">doc2bow</span><span class="p">(</span><span class="n">bag</span><span class="p">)</span> <span class="k">for</span> <span class="n">bag</span> <span class="ow">in</span> <span class="n">bags</span><span class="p">]</span>
+
+    <span class="n">Lda</span> <span class="o">=</span> <span class="n">gensim</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">ldamulticore</span><span class="o">.</span><span class="n">LdaMulticore</span>
+    <span class="n">ldamodel</span> <span class="o">=</span> <span class="n">Lda</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">num_topics</span><span class="o">=</span><span class="n">n_topics</span><span class="p">,</span> <span class="n">id2word</span><span class="o">=</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">passes</span><span class="o">=</span><span class="n">iters</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ldamodel</span></div>
+
+
+<span class="c1"># In[84]:</span>
+
+
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="k">import</span> <span class="n">CountVectorizer</span><span class="p">,</span> <span class="n">TfidfVectorizer</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="k">import</span> <span class="n">TruncatedSVD</span><span class="p">,</span> <span class="n">NMF</span><span class="p">,</span> <span class="n">LatentDirichletAllocation</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">KMeans</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># In[107]:</span>
+
+
+<span class="c1"># original version</span>
+<div class="viewcode-block" id="find_topic"><a class="viewcode-back" href="../../topic.html#topic.topic.find_topic">[docs]</a><span class="k">def</span> <span class="nf">find_topic</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">topic_model</span><span class="p">,</span> <span class="n">n_topics</span><span class="p">,</span> <span class="n">vec_model</span><span class="o">=</span><span class="s2">&quot;tf&quot;</span><span class="p">,</span> <span class="n">show_keywords</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">thr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># 1. vectorization</span>
+        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span> <span class="k">if</span> <span class="n">vec_model</span><span class="o">==</span> <span class="s2">&quot;tf&quot;</span> <span class="k">else</span> <span class="n">TfidfVectorizer</span><span class="p">()</span>
+        <span class="n">text_vec</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+
+        <span class="n">words</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">())</span>
+        <span class="c1"># 2. topic finding</span>
+        <span class="n">topic_models</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;nmf&quot;</span><span class="p">:</span><span class="n">NMF</span><span class="p">,</span> <span class="s2">&quot;svd&quot;</span><span class="p">:</span> <span class="n">TruncatedSVD</span><span class="p">,</span> <span class="s2">&quot;lda&quot;</span><span class="p">:</span><span class="n">LatentDirichletAllocation</span><span class="p">,</span> <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span><span class="n">KMeans</span><span class="p">}</span>
+        <span class="n">topicfinder</span> <span class="o">=</span> <span class="n">topic_models</span><span class="p">[</span><span class="n">topic_model</span><span class="p">](</span><span class="n">n_topics</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">text_vec</span><span class="p">)</span>
+        <span class="n">topic_dists</span> <span class="o">=</span> <span class="n">topicfinder</span><span class="o">.</span><span class="n">components_</span> <span class="k">if</span> <span class="n">topic_model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s2">&quot;kmeans&quot;</span> <span class="k">else</span> <span class="n">topicfinder</span><span class="o">.</span><span class="n">cluster_centers_</span>
+        <span class="n">topic_dists</span> <span class="o">/=</span> <span class="n">topic_dists</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># 3. keywords for topics</span>
+        <span class="k">def</span> <span class="nf">_topic_keywords</span><span class="p">(</span><span class="n">topic_dist</span><span class="p">):</span>
+            <span class="n">keywords_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">topic_dist</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">thr</span>
+            <span class="n">keywords_prefix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">topic_dist</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;^&quot;</span><span class="p">)[</span><span class="n">keywords_index</span><span class="p">]</span>
+            <span class="n">keywords</span> <span class="o">=</span> <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keywords_prefix</span><span class="p">,</span> <span class="n">words</span><span class="p">[</span><span class="n">keywords_index</span><span class="p">])))</span>
+            <span class="k">return</span> <span class="n">keywords</span>
+        <span class="n">topic_keywords</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">_topic_keywords</span><span class="p">,</span> <span class="n">topic_dists</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;Topic </span><span class="si">%i</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">topic_keywords</span><span class="p">))</span></div>
+
+
+<span class="c1"># In[59]:</span>
+
+
+<span class="c1"># vec model is tf</span>
+
+<span class="c1"># print(find_topic(bag,&quot;svd&quot;,20, vec_model = &quot;tf&quot;))</span>
+<span class="c1"># print(find_topic(bag,&quot;nmf&quot;,20, vec_model = &quot;tf&quot;))</span>
+<span class="c1"># print(find_topic(bag,&quot;lda&quot;,20, vec_model = &quot;tf&quot;))</span>
+<span class="c1"># print(find_topic(bag,&quot;kmeans&quot;,20, vec_model = &quot;tf&quot;))</span>
+
+<span class="c1"># vec model is tfidf</span>
+
+<span class="c1">#print(find_topic(bag,&quot;svd&quot;,20, vec_model = &quot;tfidf&quot;))</span>
+<span class="c1"># print(find_topic(bag, &quot;nmf&quot;, 20, vec_model = &quot;tfidf&quot;))</span>
+<span class="c1">#print(find_topic(bag,&quot;lda&quot;,20, vec_model = &quot;tfidf&quot;))</span>
+<span class="c1"># print(find_topic(bag,&quot;kmeans&quot;,20, vec_model = &quot;tfidf&quot;))</span>
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, FIT.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
