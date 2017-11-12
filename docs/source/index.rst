@@ -11,8 +11,7 @@ Welcome to Deep Lyrics's documentation!
    :caption: Contents:
 
    utils
-   topic
-   preprocess
+   attribute
 
 
 Indices and tables

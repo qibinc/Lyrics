@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>topic.topic &mdash; Deep Lyrics  documentation</title>
+  <title>attribute.topic &mdash; Deep Lyrics  documentation</title>
   
 
   
@@ -88,8 +88,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../topic.html">topic package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../preprocess.html">preprocess package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../attribute.html">attribute package</a></li>
 </ul>
 
             
@@ -136,7 +135,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>topic.topic</li>
+      <li>attribute.topic</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -153,13 +152,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for topic.topic</h1><div class="highlight"><pre>
+  <h1>Source code for attribute.topic</h1><div class="highlight"><pre>
 <span></span>
 <span class="kn">from</span> <span class="nn">gensim</span> <span class="k">import</span> <span class="n">corpora</span>
 <span class="kn">import</span> <span class="nn">gensim</span>
 
 
-<div class="viewcode-block" id="lda"><a class="viewcode-back" href="../../topic.html#topic.topic.lda">[docs]</a><span class="k">def</span> <span class="nf">lda</span><span class="p">(</span><span class="n">bags</span><span class="p">,</span> <span class="n">n_topics</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="lda"><a class="viewcode-back" href="../../attribute.html#attribute.topic.lda">[docs]</a><span class="k">def</span> <span class="nf">lda</span><span class="p">(</span><span class="n">bags</span><span class="p">,</span> <span class="n">n_topics</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 
     <span class="n">dictionary</span> <span class="o">=</span> <span class="n">corpora</span><span class="o">.</span><span class="n">Dictionary</span><span class="p">(</span><span class="n">bags</span><span class="p">)</span>
     <span class="n">corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">dictionary</span><span class="o">.</span><span class="n">doc2bow</span><span class="p">(</span><span class="n">bag</span><span class="p">)</span> <span class="k">for</span> <span class="n">bag</span> <span class="ow">in</span> <span class="n">bags</span><span class="p">]</span>
@@ -182,7 +181,7 @@
 
 
 <span class="c1"># original version</span>
-<div class="viewcode-block" id="find_topic"><a class="viewcode-back" href="../../topic.html#topic.topic.find_topic">[docs]</a><span class="k">def</span> <span class="nf">find_topic</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">topic_model</span><span class="p">,</span> <span class="n">n_topics</span><span class="p">,</span> <span class="n">vec_model</span><span class="o">=</span><span class="s2">&quot;tf&quot;</span><span class="p">,</span> <span class="n">show_keywords</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">thr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="find_topic"><a class="viewcode-back" href="../../attribute.html#attribute.topic.find_topic">[docs]</a><span class="k">def</span> <span class="nf">find_topic</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">topic_model</span><span class="p">,</span> <span class="n">n_topics</span><span class="p">,</span> <span class="n">vec_model</span><span class="o">=</span><span class="s2">&quot;tf&quot;</span><span class="p">,</span> <span class="n">show_keywords</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">thr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># 1. vectorization</span>
         <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span> <span class="k">if</span> <span class="n">vec_model</span><span class="o">==</span> <span class="s2">&quot;tf&quot;</span> <span class="k">else</span> <span class="n">TfidfVectorizer</span><span class="p">()</span>
         <span class="n">text_vec</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
