@@ -1,14 +1,60 @@
 # Lyrics
+## Introduction
+- Lyrics generation using machine learning techniques.
+- FIT 4-508, Tsinghua University.
 
-## crawler
-- 用 scrapy 框架的爬虫代码，之前是从 lrcgc.com 上爬的 lrc 文件，该网站提供的 karaoke 歌词格式为 trc，需登录+金币。
+## Setup
+- You should add the folder that contains 'Lyrics' to python path.(the parent folder of this project)
 
-## preprocess
-- 最先的预处理，筛掉广告、非中文、繁体转简体等。对歌词的简单分析，统计频率等。
-- 上面 crawler 和 preprocess 的最终输出是两个文件，titles.pkl 和 lyrics.pkl，分别是歌名和歌词的两个 list。
+```bash
+export PYTHONPATH=$PYTHONPATH:/path/to/here/
+```
 
-## seq2seq
-- seq2seq in PyTorch
+- Then setup the dependencies.
+- Anaconda is highly recommended.
 
-## rhythm
-- 输入词语找押韵的词，使用了 bigram 和 word vector 两种方法
+```bash
+conda create -n lyrics python=3.6
+source activate lyrics
+pip install -r requirements.txt
+```
+
+- Meanwhile, you can pull the data and model which will be used.
+- Tip: Dropbox is blocked by the GFW. Make sure your terminal can do the work.
+- If not, peek into saved/pull.sh and manually download them in your browser and place them under saved/.
+
+```bash
+cd saved
+bash pull.sh
+```
+
+## Subdirectories
+### docs
+- Documentation can be found at [Lyrics Documentation](https://thucqb.github.io/Lyrics/)
+
+### saved
+- Saved data including training set and trained models are kept here.
+
+### utils
+- Utility classes handling data and lyrics.
+
+### topic
+- Topic model, keyword extraction, clustering.
+
+### seq2seq
+- seq2seq implemented in PyTorch.
+
+### rhythm
+- Use bigram and word vector distance to predict word, constrained by rhythm.
+
+### crawler
+- Lyrics crawler.
+
+### preprocess
+- Data cleaning, preprocessing
+
+### app
+- App served on [Deep Lyrics](deeplyrics.eastasia.cloudapp.azure.com).
+- Frontend in React and backend in Flask.
+
+
