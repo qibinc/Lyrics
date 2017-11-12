@@ -3,8 +3,8 @@ from gensim.models import Word2Vec
 import thulac
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
-import os, Lyrics
-path_saved = os.path.join(os.path.dirname(Lyrics.__file__), 'saved')
+import os
+path_saved = os.path.join(os.path.dirname(__file__), '../saved')
 path_word2vec_model = os.path.join(path_saved, 'word2vec_model')
 
 class Doc():

@@ -4,10 +4,11 @@
 - FIT 4-508, Tsinghua University.
 
 ## Setup
-- You should add the folder that contains 'Lyrics' to python path.(the parent folder of this project)
+- You should add this 'Lyrics' folder to python path.(the parent folder of this project)
+- Add the following line to your ~/.bashrc or ~/.profile
 
 ```bash
-export PYTHONPATH=$PYTHONPATH:/path/to/here/
+export PYTHONPATH=$PYTHONPATH:<path_to_Lyrics>
 ```
 
 - Then setup the dependencies.
