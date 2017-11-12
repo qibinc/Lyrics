@@ -1,4 +1,4 @@
 __all__ = ['data', 'doc']
 
-from Lyrics.utils.doc import Doc
-from Lyrics.utils.data import read_filtered
+from utils.doc import Doc
+from utils.data import read_filtered

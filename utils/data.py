@@ -1,5 +1,5 @@
-import os, Lyrics
-path_saved = os.path.join(os.path.dirname(Lyrics.__file__), 'saved')
+import os
+path_saved = os.path.join(os.path.dirname(__file__), '../saved')
 path_lyrics_filtered = os.path.join(path_saved, 'lyrics_filtered.pkl')
 
 import pickle, random
