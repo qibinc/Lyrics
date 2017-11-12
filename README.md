@@ -4,7 +4,7 @@
 - FIT 4-508, Tsinghua University.
 
 ## Setup
-- You should add this 'Lyrics' folder to python path.(the parent folder of this project)
+- You should add this 'Lyrics' folder to python path.
 - Add the following line to your ~/.bashrc or ~/.profile
 
 ```bash
@@ -30,32 +30,39 @@ bash pull.sh
 ```
 
 ## Subdirectories
+### experiments
+- Jupyter notebooks containing experimental records and study notes are kept here.
+
 ### docs
 - Documentation can be found at [Lyrics Documentation](https://thucqb.github.io/Lyrics/)
-
-### saved
-- Saved data including training set and trained models are kept here.
 
 ### utils
 - Utility classes handling data and lyrics.
 
-### topic
+### attribute
 - Topic model, keyword extraction, clustering.
 
-### seq2seq
-- seq2seq implemented in PyTorch.
-
-### rhythm
-- Use bigram and word vector distance to predict word, constrained by rhythm.
-
-### crawler
-- Lyrics crawler.
-
-### preprocess
-- Data cleaning, preprocessing
+### saved
+- Saved data including training set and trained models are kept here.
 
 ### app
-- App served on [Deep Lyrics](deeplyrics.eastasia.cloudapp.azure.com).
+- App served on [Deep Lyrics](http://deeplyrics.eastasia.cloudapp.azure.com).
 - Frontend in React and backend in Flask.
+
+### archived
+- Code not in use but may come into use in the future.
+
+#### seq2seq
+- seq2seq implemented in PyTorch.
+
+#### rhythm
+- Use bigram and word vector distance to predict word, constrained by rhythm.
+
+#### preprocess
+- Data cleaning, preprocessing
+
+#### crawler
+- Lyrics crawler.
+
 
 
