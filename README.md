@@ -15,9 +15,8 @@ export PYTHONPATH=$PYTHONPATH:<path_to_Lyrics>
 - Anaconda is highly recommended.
 
 ```bash
-conda create -n lyrics python=3.6
+conda env create -f environment.yml
 source activate lyrics
-pip install -r requirements.txt
 ```
 
 - Meanwhile, you can pull the data and model which will be used.
