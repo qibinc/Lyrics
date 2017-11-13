@@ -42,16 +42,16 @@ print('Loading complete!')
 
 def predict_phrase_2gram(line, num_view=20):
     '''Predict the most frequent phrases that satisfiy the rhythm
-    
+
     line: the previous line, ex: ['i', 'ao']
     num_view: the number of phrases that returned
     '''
     finals = [li[0] for li in pypinyin.pinyin(line, style=pypinyin.Style.FINALS)]
     initials = [li[0] for li in pypinyin.pinyin(line, style=pypinyin.Style.INITIALS)]
-    
+
     phrase_length = len(finals)
     vocab_size = len(characters)
-    
+
     probability = np.zeros([phrase_length, vocab_size], dtype='float')
     path = np.zeros([phrase_length, vocab_size], dtype='int') - 1
     for idx, char in enumerate(characters):
@@ -60,11 +60,11 @@ def predict_phrase_2gram(line, num_view=20):
 
     for k in range(1, phrase_length):
         for idx, char in enumerate(characters):
-            if char_finals[idx] == finals[k]:                
+            if char_finals[idx] == finals[k]:
                 probability[k][idx] = np.max(probability[k - 1] * with_prev_freq[idx])
                 if probability[k][idx] > 0:
                     path[k][idx] = np.argmax(probability[k - 1] * with_prev_freq[idx])
-    
+
     def path2phrase(k, idx):
         phrase = ''
         while k >= 0:
@@ -129,7 +129,7 @@ def predict_phrase_embedding(line, num_view=20):
             d[word] = list(candidate_list[np.argsort(candidate_similarity)[::-1][:num_view]])[1:]
         except Exception:
             d[word] = []
-            
+
     return d
 
 
