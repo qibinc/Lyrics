@@ -67,7 +67,7 @@ class Doc():
 
     @classmethod
     def load_corpus(cls, lyrics, vocab_size=10000, unk_percentage=0.08, tokenizer='word'):
-        """Load from lyrics read by data.read()
+        """Load from lyrics read by utils.data.read()
 
         :param lyrics: a list of original lyrics texts
         :type lyrics: list
@@ -110,6 +110,12 @@ class Doc():
         Or a list of numpy arrays to a piece of lyrics
 
         :param idxs: a numpy array or a list of numpy array
+
+        .. code-block:: python
+
+            doc = Doc.get_corpus()[0]
+            print(Doc.idxs_to_text(doc.get_bag()))
+            print(Doc.idxs_to_text(doc.get_lines()))
         """
         if type(idxs) is list:
             return '\n'.join([
@@ -195,6 +201,13 @@ class Doc():
     @classmethod
     def load(cls):
         """``Load things back!!``"""
+        if not os.path.exists(os.path.join(path_saved, 'Doc_corpus'))\
+            or not os.path.exists(os.path.join(path_saved, 'Doc_vocab')):
+            print('Doc.load() Error! Nothing saved!\
+                You need to run Doc.load_corpus(..) at least once\
+                and call Doc.save() aftere that.\
+                Then you can use Doc.load() in the future')
+
         with open(os.path.join(path_saved, 'Doc_corpus'), 'rb') as f:
             cls.__corpus = pickle.load(f)
         with open(os.path.join(path_saved, 'Doc_vocab'), 'rb') as f:

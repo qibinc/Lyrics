@@ -1,3 +1,4 @@
-__all__ = ['topic']
+__all__ = ['topic', 'keyword']
 
 from attribute.topic import lda, find_topic
+from attribute.keyword import TFIDFKeywordExtractor
