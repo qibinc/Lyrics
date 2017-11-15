@@ -87,8 +87,8 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../attribute.html">attribute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../attribute.html">attribute</a></li>
 </ul>
 
             
@@ -159,7 +159,15 @@
 
 <span class="kn">import</span> <span class="nn">pickle</span><span class="o">,</span> <span class="nn">random</span>
 
-<div class="viewcode-block" id="read_filtered"><a class="viewcode-back" href="../../utils.html#utils.data.read_filtered">[docs]</a><span class="k">def</span> <span class="nf">read_filtered</span><span class="p">():</span>
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../utils.html#utils.data.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Read lyrics data from saved folder.</span>
+
+<span class="sd">    :returns: a list of string</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        [&#39;天青色 等烟雨\\n而我在等你&#39;, &#39;故事的小黄花\\n从出生那年就飘着&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_lyrics_filtered</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">lyrics</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">lyrics</span><span class="p">)</span>

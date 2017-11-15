@@ -1,16 +1,16 @@
-utils package
-=============
+utils
+=====
 
-utils\.data module
-------------------
+utils\.data
+-----------
 
 .. automodule:: utils.data
     :members:
     :undoc-members:
     :show-inheritance:
 
-utils\.doc module
------------------
+utils\.doc
+----------
 
 .. automodule:: utils.doc
     :members:

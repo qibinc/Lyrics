@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>attribute package &mdash; Deep Lyrics  documentation</title>
+  <title>attribute &mdash; Deep Lyrics  documentation</title>
   
 
   
@@ -36,7 +36,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Deep Lyrics  documentation" href="index.html"/>
-        <link rel="prev" title="utils package" href="utils.html"/> 
+        <link rel="prev" title="utils" href="utils.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -87,9 +87,10 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils package</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">attribute package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-attribute.topic">atrribute.topic module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">attribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-attribute.keyword">attribute.keyword</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-attribute.topic">atrribute.topic</a></li>
 </ul>
 </li>
 </ul>
@@ -136,7 +137,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>attribute package</li>
+      <li>attribute</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -155,10 +156,56 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="attribute-package">
-<h1>attribute package<a class="headerlink" href="#attribute-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="attribute">
+<h1>attribute<a class="headerlink" href="#attribute" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-attribute.keyword">
+<span id="attribute-keyword"></span><h2>attribute.keyword<a class="headerlink" href="#module-attribute.keyword" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="attribute.keyword.KeywordExtractor">
+<em class="property">class </em><code class="descclassname">attribute.keyword.</code><code class="descname">KeywordExtractor</code><a class="reference internal" href="_modules/attribute/keyword.html#KeywordExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.KeywordExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">attribute.extractor.Extractor</span></code></p>
+<p>Base class of extracting keywords</p>
+<dl class="method">
+<dt id="attribute.keyword.KeywordExtractor.get_keywords">
+<code class="descname">get_keywords</code><span class="sig-paren">(</span><em>n_keywords=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/keyword.html#KeywordExtractor.get_keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.KeywordExtractor.get_keywords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="attribute.keyword.TFIDFKeywordExtractor">
+<em class="property">class </em><code class="descclassname">attribute.keyword.</code><code class="descname">TFIDFKeywordExtractor</code><span class="sig-paren">(</span><em>bags</em>, <em>vocab_size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/keyword.html#TFIDFKeywordExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.TFIDFKeywordExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#attribute.keyword.KeywordExtractor" title="attribute.keyword.KeywordExtractor"><code class="xref py py-class docutils literal"><span class="pre">attribute.keyword.KeywordExtractor</span></code></a></p>
+<p>Use tf-idf to extract keywords from each bag of words</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bags</strong> (<em>list</em>) – a list of numpy arrays representing bags of words.</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">Doc</span>
+<span class="n">Doc</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">bags</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">([</span><span class="n">doc</span><span class="o">.</span><span class="n">get_lines</span><span class="p">()</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">get_corpus</span><span class="p">()])</span>
+<span class="n">TFIDFKeywordExtractor</span><span class="p">(</span><span class="n">bags</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">get_vocab</span><span class="p">()))</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="attribute.keyword.TFIDFKeywordExtractor.get_keywords">
+<code class="descname">get_keywords</code><span class="sig-paren">(</span><em>n_keywords=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/keyword.html#TFIDFKeywordExtractor.get_keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.TFIDFKeywordExtractor.get_keywords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the keywords of input bags.</p>
+<p>Warning: not all the return values have exact n_keywords
+:param n_keywords: number of keywords want to extract, defaults to 1
+:type n_keywords: number, optional</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-attribute.topic">
-<span id="atrribute-topic-module"></span><h2>atrribute.topic module<a class="headerlink" href="#module-attribute.topic" title="Permalink to this headline">¶</a></h2>
+<span id="atrribute-topic"></span><h2>atrribute.topic<a class="headerlink" href="#module-attribute.topic" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="attribute.topic.lda">
 <code class="descclassname">attribute.topic.</code><code class="descname">lda</code><span class="sig-paren">(</span><em>bags</em>, <em>n_topics</em>, <em>iters=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/topic.html#lda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.topic.lda" title="Permalink to this definition">¶</a></dt>
@@ -183,7 +230,7 @@
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="utils.html" class="btn btn-neutral" title="utils package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral" title="utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

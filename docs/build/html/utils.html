@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>utils package &mdash; Deep Lyrics  documentation</title>
+  <title>utils &mdash; Deep Lyrics  documentation</title>
   
 
   
@@ -36,7 +36,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Deep Lyrics  documentation" href="index.html"/>
-        <link rel="next" title="attribute package" href="attribute.html"/>
+        <link rel="next" title="attribute" href="attribute.html"/>
         <link rel="prev" title="Welcome to Deep Lyrics’s documentation!" href="index.html"/> 
 
   
@@ -88,12 +88,12 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">utils package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-utils.data">utils.data module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-utils.doc">utils.doc module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-utils.data">utils.data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-utils.doc">utils.doc</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="attribute.html">attribute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="attribute.html">attribute</a></li>
 </ul>
 
             
@@ -138,7 +138,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>utils package</li>
+      <li>utils</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -157,89 +157,207 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="utils-package">
-<h1>utils package<a class="headerlink" href="#utils-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="utils">
+<h1>utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-utils.data">
-<span id="utils-data-module"></span><h2>utils.data module<a class="headerlink" href="#module-utils.data" title="Permalink to this headline">¶</a></h2>
+<span id="utils-data"></span><h2>utils.data<a class="headerlink" href="#module-utils.data" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="utils.data.read_filtered">
-<code class="descclassname">utils.data.</code><code class="descname">read_filtered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/data.html#read_filtered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.data.read_filtered" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="utils.data.read">
+<code class="descclassname">utils.data.</code><code class="descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/data.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.data.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read lyrics data from saved folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of string</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;天青色 等烟雨</span><span class="se">\n</span><span class="s1">而我在等你&#39;</span><span class="p">,</span> <span class="s1">&#39;故事的小黄花</span><span class="se">\n</span><span class="s1">从出生那年就飘着&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </div>
 <div class="section" id="module-utils.doc">
-<span id="utils-doc-module"></span><h2>utils.doc module<a class="headerlink" href="#module-utils.doc" title="Permalink to this headline">¶</a></h2>
+<span id="utils-doc"></span><h2>utils.doc<a class="headerlink" href="#module-utils.doc" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="utils.doc.Doc">
 <em class="property">class </em><code class="descclassname">utils.doc.</code><code class="descname">Doc</code><span class="sig-paren">(</span><em>lyric</em>, <em>depth=0</em>, <em>tokenizer='word'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
-<p>Operate lyrics.</p>
-<p>Use Doc.load_corpus(lyrics) to initialize the corpus</p>
-<dl class="attribute">
-<dt id="utils.doc.Doc.model">
-<code class="descname">model</code><em class="property"> = &lt;gensim.models.word2vec.Word2Vec object&gt;</em><a class="headerlink" href="#utils.doc.Doc.model" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="utils.doc.Doc.cut">
-<code class="descname">cut</code><em class="property"> = &lt;thulac.thulac object&gt;</em><a class="headerlink" href="#utils.doc.Doc.cut" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="utils.doc.Doc.corpus">
-<code class="descname">corpus</code><em class="property"> = []</em><a class="headerlink" href="#utils.doc.Doc.corpus" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="utils.doc.Doc.filter_list">
-<code class="descname">filter_list</code><em class="property"> = [' ', '\n']</em><a class="headerlink" href="#utils.doc.Doc.filter_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="utils.doc.Doc.hierarchy">
-<code class="descname">hierarchy</code><em class="property"> = ['\n']</em><a class="headerlink" href="#utils.doc.Doc.hierarchy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
+<p>Operate lyrics as documents.</p>
+<p>Use <code class="docutils literal"><span class="pre">Doc.load_corpus(lyrics)</span></code> to initialize the corpus.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">Doc</span><span class="p">,</span> <span class="n">read</span>
+<span class="n">dev_lyrcs</span> <span class="o">=</span> <span class="n">read</span><span class="p">()[:</span><span class="mi">500</span><span class="p">]</span>
+<span class="n">Doc</span><span class="o">.</span><span class="n">load_corpus</span><span class="p">(</span><span class="n">dev_lyrics</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In case you have to create an instance, use Doc(lyric, depth, tokenizer).</p>
+<p>Hierarchy in the lyric will be parsed(recursively) and can be accessed by <code class="docutils literal"><span class="pre">doc.get_children()</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lyric</strong> – a piece of lyric, list of sentence</li>
+<li><strong>depth</strong> – used internally for hierarchy, default to 0</li>
+<li><strong>tokenizer</strong> – the tokenizer(char/word), default to word</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Doc</span><span class="p">(</span><span class="n">lyric</span><span class="o">=</span><span class="s1">&#39;Hello world</span><span class="se">\n</span><span class="s1">Goodbye world&#39;</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s1">&#39;word&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="classmethod">
 <dt id="utils.doc.Doc.load_corpus">
-<code class="descname">load_corpus</code><span class="sig-paren">(</span><em>lyrics</em>, <em>tokenizer='word'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.load_corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.load_corpus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load from lyrics read by data.read_filtered()</p>
-<p>tokenizer: char / word</p>
+<em class="property">classmethod </em><code class="descname">load_corpus</code><span class="sig-paren">(</span><em>lyrics</em>, <em>vocab_size=10000</em>, <em>unk_percentage=0.08</em>, <em>tokenizer='word'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.load_corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.load_corpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load from lyrics read by utils.data.read()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lyrics</strong> (<em>list</em>) – a list of original lyrics texts</li>
+<li><strong>vocab_size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – the vocabulary size</li>
+<li><strong>unk_percentage</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – maximum percentage of unknown token in a doc</li>
+<li><strong>tokenizer</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – char / word, defaults to ‘word’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="utils.doc.Doc.get_corpus">
+<em class="property">classmethod </em><code class="descname">get_corpus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.get_corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.get_corpus" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The list of the Doc() instances created by load_corpus()</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="utils.doc.Doc.get_vocab">
+<em class="property">classmethod </em><code class="descname">get_vocab</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.get_vocab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.get_vocab" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the vocabulary dict of the corpus.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="utils.doc.Doc.idxs_to_text">
+<em class="property">classmethod </em><code class="descname">idxs_to_text</code><span class="sig-paren">(</span><em>idxs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.idxs_to_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.idxs_to_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the text of idxs.</p>
+<p>Convert a numpy array to a sentence.
+Or a list of numpy arrays to a piece of lyrics</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>idxs</strong> – a numpy array or a list of numpy array</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">doc</span> <span class="o">=</span> <span class="n">Doc</span><span class="o">.</span><span class="n">get_corpus</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">idxs_to_text</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">get_bag</span><span class="p">()))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">idxs_to_text</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">get_lines</span><span class="p">()))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
-<dt id="utils.doc.Doc.filter_corpus">
-<code class="descname">filter_corpus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.filter_corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.filter_corpus" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="utils.doc.Doc.get_origin">
+<code class="descname">get_origin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.get_origin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.get_origin" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the original text of this doc</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="utils.doc.Doc.filter">
-<code class="descname">filter</code><span class="sig-paren">(</span><em>vocab</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="utils.doc.Doc.get_bag">
+<code class="descname">get_bag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.get_bag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.get_bag" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list(bag) of indexs(int) of this doc</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="utils.doc.Doc.to_vec">
-<code class="descname">to_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.to_vec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use pretrained model to get the vector[512] of bag</p>
+<dt id="utils.doc.Doc.get_lines">
+<code class="descname">get_lines</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.get_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.get_lines" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of list(bag) of indexs(int) in the lyrics.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.doc.Doc.embedding">
+<code class="descname">embedding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.embedding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.embedding" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">embedding of the doc as bag of words using pre-trained model.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="utils.doc.Doc.similarity">
 <code class="descname">similarity</code><span class="sig-paren">(</span><em>doc2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.similarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.similarity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the cosine distance between two lines.</p>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the cosine distance between two lines.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
-<dt id="utils.doc.Doc.most_similar">
-<code class="descname">most_similar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.most_similar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.most_similar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the most similar line in the corpus.</p>
-<p>Similar defined as cosine distance.</p>
+<dl class="classmethod">
+<dt id="utils.doc.Doc.dump">
+<em class="property">classmethod </em><code class="descname">dump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">Save</span> <span class="pre">everything</span> <span class="pre">and</span> <span class="pre">next</span> <span class="pre">time</span> <span class="pre">use</span> <span class="pre">load()</span> <span class="pre">instead</span> <span class="pre">of</span> <span class="pre">load_corpus()</span> <span class="pre">to</span> <span class="pre">save</span> <span class="pre">time!!</span></code></p>
 </dd></dl>
 
-<dl class="method">
+<dl class="classmethod">
+<dt id="utils.doc.Doc.load">
+<em class="property">classmethod </em><code class="descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.load" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">Load</span> <span class="pre">things</span> <span class="pre">back!!</span></code></p>
+</dd></dl>
+
+<dl class="classmethod">
 <dt id="utils.doc.Doc.test">
-<code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unit test &amp; usage</p>
+<em class="property">classmethod </em><code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unit test and usage</p>
 </dd></dl>
 
 </dd></dl>
@@ -257,7 +375,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="attribute.html" class="btn btn-neutral float-right" title="attribute package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="attribute.html" class="btn btn-neutral float-right" title="attribute" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="Welcome to Deep Lyrics’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
