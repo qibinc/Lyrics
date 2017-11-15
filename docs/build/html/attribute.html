@@ -167,38 +167,47 @@
 <p>Base class of extracting keywords</p>
 <dl class="method">
 <dt id="attribute.keyword.KeywordExtractor.get_keywords">
-<code class="descname">get_keywords</code><span class="sig-paren">(</span><em>n_keywords=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/keyword.html#KeywordExtractor.get_keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.KeywordExtractor.get_keywords" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_keywords</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/keyword.html#KeywordExtractor.get_keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.KeywordExtractor.get_keywords" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="attribute.keyword.TFIDFKeywordExtractor">
-<em class="property">class </em><code class="descclassname">attribute.keyword.</code><code class="descname">TFIDFKeywordExtractor</code><span class="sig-paren">(</span><em>bags</em>, <em>vocab_size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/keyword.html#TFIDFKeywordExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.TFIDFKeywordExtractor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">attribute.keyword.</code><code class="descname">TFIDFKeywordExtractor</code><span class="sig-paren">(</span><em>list_of_list_of_lines</em>, <em>vocab_size</em>, <em>n_keywords=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/keyword.html#TFIDFKeywordExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.TFIDFKeywordExtractor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#attribute.keyword.KeywordExtractor" title="attribute.keyword.KeywordExtractor"><code class="xref py py-class docutils literal"><span class="pre">attribute.keyword.KeywordExtractor</span></code></a></p>
 <p>Use tf-idf to extract keywords from each bag of words</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bags</strong> (<em>list</em>) – a list of numpy arrays representing bags of words.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>list_of_list_of_lines</strong> (<em>list</em>) – a list of list of numpy arrays representing list_of_list_of_lines of words.</li>
+<li><strong>n_keywords</strong> (<em>number</em><em>, </em><em>optional</em>) – number of keywords want to extract, defaults to 1</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">Doc</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">Doc</span>
 <span class="n">Doc</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-<span class="n">bags</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">([</span><span class="n">doc</span><span class="o">.</span><span class="n">get_lines</span><span class="p">()</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">get_corpus</span><span class="p">()])</span>
-<span class="n">TFIDFKeywordExtractor</span><span class="p">(</span><span class="n">bags</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">get_vocab</span><span class="p">()))</span>
+<span class="n">list_of_list_of_lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">doc</span><span class="o">.</span><span class="n">get_lines</span><span class="p">()</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">get_corpus</span><span class="p">()]</span>
+<span class="n">TFIDFKeywordExtractor</span><span class="p">(</span><span class="n">list_of_list_of_lines</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">get_vocab</span><span class="p">()))</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="attribute.keyword.TFIDFKeywordExtractor.get_keywords">
-<code class="descname">get_keywords</code><span class="sig-paren">(</span><em>n_keywords=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/keyword.html#TFIDFKeywordExtractor.get_keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.TFIDFKeywordExtractor.get_keywords" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the keywords of input bags.</p>
-<p>Warning: not all the return values have exact n_keywords
-:param n_keywords: number of keywords want to extract, defaults to 1
-:type n_keywords: number, optional</p>
+<code class="descname">get_keywords</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/attribute/keyword.html#TFIDFKeywordExtractor.get_keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#attribute.keyword.TFIDFKeywordExtractor.get_keywords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the keywords of input list_of_list_of_lines.</p>
+<p>Warning: not all the return values have exact n_keywords</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list looks like the input. Except that the sequence of sentence now become a list of keywords.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>

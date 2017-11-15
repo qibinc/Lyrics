@@ -273,10 +273,10 @@
 <span class="sd">            print(Doc.idxs_to_text(doc.get_lines()))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="k">return</span> <span class="p">[</span>
                 <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sentence_idxs</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">sentence_idxs</span> <span class="ow">in</span> <span class="n">idxs</span>
-                <span class="p">])</span>
+                <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">])</span></div>
 
@@ -362,6 +362,7 @@
 <span class="s1">                You need to run Doc.load_corpus(..) at least once</span><span class="se">\</span>
 <span class="s1">                and call Doc.save() aftere that.</span><span class="se">\</span>
 <span class="s1">                Then you can use Doc.load() in the future&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_saved</span><span class="p">,</span> <span class="s1">&#39;Doc_corpus&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>

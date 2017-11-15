@@ -118,10 +118,10 @@ class Doc():
             print(Doc.idxs_to_text(doc.get_lines()))
         """
         if type(idxs) is list:
-            return '\n'.join([
+            return [
                 ''.join([cls.__idx2word[idx] for idx in sentence_idxs])
                 for sentence_idxs in idxs
-                ])
+                ]
         else:
             return ''.join([cls.__idx2word[idx] for idx in idxs])
 
@@ -207,6 +207,7 @@ class Doc():
                 You need to run Doc.load_corpus(..) at least once\
                 and call Doc.save() aftere that.\
                 Then you can use Doc.load() in the future')
+            return
 
         with open(os.path.join(path_saved, 'Doc_corpus'), 'rb') as f:
             cls.__corpus = pickle.load(f)
