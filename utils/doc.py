@@ -40,6 +40,11 @@ class Doc():
     __hierarchy = ['\n']
     __vocab = None
     __idx2word = None
+    __special_words = {
+        'SOS_token':0
+        'EOS_token':1
+        'PAD_token':2
+        }
 
     def __init__(self, lyric, depth=0, tokenizer='word'):
         """Tokenize a string and store as bag of words.
@@ -159,10 +164,13 @@ class Doc():
 
         texts = [' '.join(document.bag) for document in cls.__corpus]
 
-        vectorizer = CountVectorizer(token_pattern='\\b\\w+\\b', max_features=vocab_size)
+        vectorizer = CountVectorizer(token_pattern='\\b\\w+\\b', max_features=(vocab_size-len(cls.__special_words))
         vectorizer.fit_transform(texts)
 
         cls.__vocab = vectorizer.vocabulary_
+        for k,v in cls.__vocab.items():
+            cls.__vocab.update({k,(v+len(cls.__special_words))})
+        cls.__vocab = dict(cls.__special_words,**cls.__vocab)
         cls.__idx2word = {v: k for k, v in cls.__vocab.items()}
 
         corpus_size = len(cls.__corpus)
