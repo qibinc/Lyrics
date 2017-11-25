@@ -164,7 +164,7 @@ class Doc():
 
         texts = [' '.join(document.bag) for document in cls.__corpus]
 
-        vectorizer = CountVectorizer(token_pattern='\\b\\w+\\b', max_features=(vocab_size-len(cls.__special_words))
+        vectorizer = CountVectorizer(token_pattern='\\b\\w+\\b', max_features=(vocab_size-len(cls.__special_words)))
         vectorizer.fit_transform(texts)
 
         cls.__vocab = vectorizer.vocabulary_
