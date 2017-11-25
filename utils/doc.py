@@ -41,8 +41,8 @@ class Doc():
     __vocab = None
     __idx2word = None
     __special_words = {
-        'SOS_token':0
-        'EOS_token':1
+        'SOS_token':0,
+        'EOS_token':1,
         'PAD_token':2
         }
 
