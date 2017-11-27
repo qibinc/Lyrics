@@ -40,11 +40,6 @@ class Doc():
     __hierarchy = ['\n']
     __vocab = None
     __idx2word = None
-    __special_words = {
-        'SOS_token':0,
-        'EOS_token':1,
-        'PAD_token':2
-        }
 
     def __init__(self, lyric, depth=0, tokenizer='word'):
         """Tokenize a string and store as bag of words.
@@ -108,6 +103,50 @@ class Doc():
             return cls.__vocab
 
     @classmethod
+    def extend_vocab(cls, symbol_list):
+        """Add customized symbols to the vocab and treat them as ordinary words.
+
+        Note: we don't automatically dump the extended vocab to file.\
+                So either use `Doc.dump` after this or `Doc.extend` \
+                everytime after you use `Doc.load` which is recommended.
+
+        :param symbol_list: the list of desired additional symbols
+        :type symbol_list: list
+
+        .. code-block: python
+
+            symbols = ['PAD', 'SOS', 'EOS']
+            Doc.extend_vocab(symbols)
+            vocab = Doc.get_vocab()
+            print(len(vocab))
+            for symbol in symbols:
+                print(vocab[symbol])
+            print(Doc.idxs_to_text(vocab['PAD']))
+        """
+        for symbol in symbol_list:
+            if symbol not in Doc.__vocab:
+                cls.__idx2word[len(cls.__vocab)] = symbol
+                cls.__vocab[symbol] = len(cls.__vocab)
+
+    @classmethod
+    def text_to_idxs(cls, text, tokenizer='word'):
+        """Return the idxs of given text
+
+        :param text: the text in string format
+        :type text: str
+        :param tokenizer: how do you wish to process the text (word/char)
+
+        .. code-block:: python
+
+            # try:
+            Doc.text_to_idxs('天青色等烟雨')
+            Doc.text_to_idxs('天青色等烟雨\n而我在等你')
+        """
+        doc = Doc(text, tokenizer=tokenizer)
+        doc.__filter()
+        return doc.get_lines()
+
+    @classmethod
     def idxs_to_text(cls, idxs):
         """Return the text of idxs.
 
@@ -119,10 +158,13 @@ class Doc():
         .. code-block:: python
 
             doc = Doc.get_corpus()[0]
+            print(Doc.idxs_to_text(0))
             print(Doc.idxs_to_text(doc.get_bag()))
             print(Doc.idxs_to_text(doc.get_lines()))
         """
-        if type(idxs) is list:
+        if type(idxs) is int:
+            return cls.__idx2word[idxs]
+        elif type(idxs) is list:
             return [
                 ''.join([cls.__idx2word[idx] for idx in sentence_idxs])
                 for sentence_idxs in idxs
@@ -164,13 +206,10 @@ class Doc():
 
         texts = [' '.join(document.bag) for document in cls.__corpus]
 
-        vectorizer = CountVectorizer(token_pattern='\\b\\w+\\b', max_features=(vocab_size-len(cls.__special_words)))
+        vectorizer = CountVectorizer(token_pattern='\\b\\w+\\b', max_features=(vocab_size))
         vectorizer.fit_transform(texts)
 
         cls.__vocab = vectorizer.vocabulary_
-        for k,v in cls.__vocab.items():
-            cls.__vocab.update({k,(v+len(cls.__special_words))})
-        cls.__vocab = dict(cls.__special_words,**cls.__vocab)
         cls.__idx2word = {v: k for k, v in cls.__vocab.items()}
 
         corpus_size = len(cls.__corpus)
