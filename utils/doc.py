@@ -113,7 +113,7 @@ class Doc():
         :param symbol_list: the list of desired additional symbols
         :type symbol_list: list
 
-        .. code-block: python
+        .. code-block:: python
 
             symbols = ['PAD', 'SOS', 'EOS']
             Doc.extend_vocab(symbols)
@@ -131,16 +131,14 @@ class Doc():
     @classmethod
     def text_to_idxs(cls, text, tokenizer='word'):
         """Return the idxs of given text
-
+        
         :param text: the text in string format
-        :type text: str
-        :param tokenizer: how do you wish to process the text (word/char)
 
         .. code-block:: python
 
             # try:
             Doc.text_to_idxs('天青色等烟雨')
-            Doc.text_to_idxs('天青色等烟雨\n而我在等你')
+            Doc.text_to_idxs('天青色等烟雨\\n而我在等你')
         """
         doc = Doc(text, tokenizer=tokenizer)
         doc.__filter()
