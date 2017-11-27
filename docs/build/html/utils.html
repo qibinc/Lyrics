@@ -257,6 +257,49 @@
 </dd></dl>
 
 <dl class="classmethod">
+<dt id="utils.doc.Doc.extend_vocab">
+<em class="property">classmethod </em><code class="descname">extend_vocab</code><span class="sig-paren">(</span><em>symbol_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.extend_vocab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.extend_vocab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add customized symbols to the vocab and treat them as ordinary words.</p>
+<p>Note: we don’t automatically dump the extended vocab to file.                So either use <cite>Doc.dump</cite> after this or <cite>Doc.extend</cite>                 everytime after you use <cite>Doc.load</cite> which is recommended.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>symbol_list</strong> (<em>list</em>) – the list of desired additional symbols</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">symbols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PAD&#39;</span><span class="p">,</span> <span class="s1">&#39;SOS&#39;</span><span class="p">,</span> <span class="s1">&#39;EOS&#39;</span><span class="p">]</span>
+<span class="n">Doc</span><span class="o">.</span><span class="n">extend_vocab</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="n">Doc</span><span class="o">.</span><span class="n">get_vocab</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vocab</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">symbols</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">vocab</span><span class="p">[</span><span class="n">symbol</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">idxs_to_text</span><span class="p">(</span><span class="n">vocab</span><span class="p">[</span><span class="s1">&#39;PAD&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="utils.doc.Doc.text_to_idxs">
+<em class="property">classmethod </em><code class="descname">text_to_idxs</code><span class="sig-paren">(</span><em>text</em>, <em>tokenizer='word'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.text_to_idxs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.text_to_idxs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the idxs of given text</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> – the text in string format</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># try:</span>
+<span class="n">Doc</span><span class="o">.</span><span class="n">text_to_idxs</span><span class="p">(</span><span class="s1">&#39;天青色等烟雨&#39;</span><span class="p">)</span>
+<span class="n">Doc</span><span class="o">.</span><span class="n">text_to_idxs</span><span class="p">(</span><span class="s1">&#39;天青色等烟雨</span><span class="se">\n</span><span class="s1">而我在等你&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
 <dt id="utils.doc.Doc.idxs_to_text">
 <em class="property">classmethod </em><code class="descname">idxs_to_text</code><span class="sig-paren">(</span><em>idxs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.idxs_to_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.idxs_to_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the text of idxs.</p>
@@ -271,6 +314,7 @@ Or a list of numpy arrays to a piece of lyrics</p>
 </tbody>
 </table>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">doc</span> <span class="o">=</span> <span class="n">Doc</span><span class="o">.</span><span class="n">get_corpus</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">idxs_to_text</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 <span class="k">print</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">idxs_to_text</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">get_bag</span><span class="p">()))</span>
 <span class="k">print</span><span class="p">(</span><span class="n">Doc</span><span class="o">.</span><span class="n">idxs_to_text</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">get_lines</span><span class="p">()))</span>
 </pre></div>

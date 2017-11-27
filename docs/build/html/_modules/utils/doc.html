@@ -257,6 +257,48 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span></div>
 
+<div class="viewcode-block" id="Doc.extend_vocab"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.extend_vocab">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">extend_vocab</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">symbol_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add customized symbols to the vocab and treat them as ordinary words.</span>
+
+<span class="sd">        Note: we don&#39;t automatically dump the extended vocab to file.\</span>
+<span class="sd">                So either use `Doc.dump` after this or `Doc.extend` \</span>
+<span class="sd">                everytime after you use `Doc.load` which is recommended.</span>
+
+<span class="sd">        :param symbol_list: the list of desired additional symbols</span>
+<span class="sd">        :type symbol_list: list</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            symbols = [&#39;PAD&#39;, &#39;SOS&#39;, &#39;EOS&#39;]</span>
+<span class="sd">            Doc.extend_vocab(symbols)</span>
+<span class="sd">            vocab = Doc.get_vocab()</span>
+<span class="sd">            print(len(vocab))</span>
+<span class="sd">            for symbol in symbols:</span>
+<span class="sd">                print(vocab[symbol])</span>
+<span class="sd">            print(Doc.idxs_to_text(vocab[&#39;PAD&#39;]))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">symbol_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">symbol</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">Doc</span><span class="o">.</span><span class="n">__vocab</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span><span class="p">)]</span> <span class="o">=</span> <span class="n">symbol</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Doc.text_to_idxs"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.text_to_idxs">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">text_to_idxs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s1">&#39;word&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the idxs of given text</span>
+<span class="sd">        </span>
+<span class="sd">        :param text: the text in string format</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # try:</span>
+<span class="sd">            Doc.text_to_idxs(&#39;天青色等烟雨&#39;)</span>
+<span class="sd">            Doc.text_to_idxs(&#39;天青色等烟雨\\n而我在等你&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="n">Doc</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
+        <span class="n">doc</span><span class="o">.</span><span class="n">__filter</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">get_lines</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Doc.idxs_to_text"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.idxs_to_text">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">idxs_to_text</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">idxs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the text of idxs.</span>
@@ -269,10 +311,13 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            doc = Doc.get_corpus()[0]</span>
+<span class="sd">            print(Doc.idxs_to_text(0))</span>
 <span class="sd">            print(Doc.idxs_to_text(doc.get_bag()))</span>
 <span class="sd">            print(Doc.idxs_to_text(doc.get_lines()))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">idxs</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span>
                 <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sentence_idxs</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">sentence_idxs</span> <span class="ow">in</span> <span class="n">idxs</span>
@@ -314,7 +359,7 @@
 
         <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">bag</span><span class="p">)</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">]</span>
 
-        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">token_pattern</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">b</span><span class="se">\\</span><span class="s1">w+</span><span class="se">\\</span><span class="s1">b&#39;</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="n">vocab_size</span><span class="p">)</span>
+        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">token_pattern</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">b</span><span class="se">\\</span><span class="s1">w+</span><span class="se">\\</span><span class="s1">b&#39;</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">))</span>
         <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">vocabulary_</span>
