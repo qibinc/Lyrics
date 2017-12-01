@@ -11,16 +11,16 @@ from torch.autograd import Variable
 from torch import optim, nn
 import torch.nn.functional as F
 # from gensim.models import Word2Vec
-
+from utils import Doc, read
 
 hidden_size = 512
 teacher_forcing_ratio = 0.5
 MIN_LENGTH = 0
 MAX_LENGTH = 40
 BATCH_SIZE = 32
-SOS_token = 0
-EOS_token = 1
-PAD_token = 2
+# SOS_token = 0
+# EOS_token = 1
+# PAD_token = 2
 #use_cuda = False
 use_cuda = torch.cuda.is_available()
 print('use_cuda ',use_cuda)
@@ -125,7 +125,7 @@ class AttnDecoderRNN(nn.Module):
         else:
             return result        
         
-def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion, max_length=MAX_LENGTH):
+def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion,vocab, max_length=MAX_LENGTH):
     encoder_hidden = encoder.initHidden(BATCH_SIZE)
 
     encoder_optimizer.zero_grad()
@@ -144,7 +144,7 @@ def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, 
             input_variable[ei], encoder_hidden)
         encoder_outputs[:, ei] = encoder_output[0]
 
-    decoder_input = Variable(torch.LongTensor([[SOS_token]] * BATCH_SIZE))
+    decoder_input = Variable(torch.LongTensor([[vocab['SOS']]] * BATCH_SIZE))
     decoder_input = decoder_input.cuda() if use_cuda else decoder_input
     
     decoder_hidden = encoder_hidden
@@ -181,7 +181,7 @@ def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, 
 
     return loss.data[0] / target_length
 
-def evaluate(input_variable, target_variable, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion, max_length=MAX_LENGTH):
+def evaluate(input_variable, target_variable, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion,vocab, max_length=MAX_LENGTH):
     encoder_hidden = encoder.initHidden(BATCH_SIZE)
 
     encoder_optimizer.zero_grad()
@@ -200,7 +200,7 @@ def evaluate(input_variable, target_variable, encoder, decoder, encoder_optimize
             input_variable[ei], encoder_hidden)
         encoder_outputs[:, ei] = encoder_output[0]
 
-    decoder_input = Variable(torch.LongTensor([[SOS_token]] * BATCH_SIZE))
+    decoder_input = Variable(torch.LongTensor([[vocab['SOS']]] * BATCH_SIZE))
     decoder_input = decoder_input.cuda() if use_cuda else decoder_input
     
     decoder_hidden = encoder_hidden
