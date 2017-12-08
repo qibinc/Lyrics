@@ -38,7 +38,7 @@ bash pull.sh
     -   [AAAI 2018, Style Transfer in Text: Exploration and Evaluation](http://arxiv.org/abs/1711.06861v2)
     -   [ACL 2017, Hafez: an Interactive Poetry Generation System](http://www.aclweb.org/anthology/P17-4008)
     -   [NIPS 2017 Workshop, Improved Neural Text Attribute Transfer with Non-parallel Data](http://arxiv.org/abs/1711.09395v2)
-    -   [EMNLP 2016, Stylistic Transfer in Natural Language Generation Systems Using Recurrent Neural Networks]
+    -   [EMNLP 2016, Stylistic Transfer in Natural Language Generation Systems Using Recurrent Neural Networks](http://www.aclweb.org/old_anthology/W/W16/W16-60.pdf#page=55)
 
 -   Thematic & Coherent
     -   [COLING 2016, Chinese Poetry Generation with Planning based Neural Network](http://arxiv.org/abs/1610.09889v2)
