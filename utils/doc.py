@@ -66,7 +66,7 @@ class Doc():
                 self.bag += child.bag
 
     @classmethod
-    def load_corpus(cls, lyrics, vocab_size=10000, unk_percentage=0.08, tokenizer='word'):
+    def load_corpus(cls, lyrics, vocab_size=10000, unk_percentage=0.05, tokenizer='word'):
         """Load from lyrics read by utils.data.read()
 
         :param lyrics: a list of original lyrics texts
@@ -131,7 +131,7 @@ class Doc():
     @classmethod
     def text_to_idxs(cls, text, tokenizer='word'):
         """Return the idxs of given text
-        
+
         :param text: the text in string format
 
         .. code-block:: python
@@ -145,13 +145,14 @@ class Doc():
         return doc.get_lines()
 
     @classmethod
-    def idxs_to_text(cls, idxs):
+    def idxs_to_text(cls, idxs, sep=''):
         """Return the text of idxs.
 
         Convert a numpy array to a sentence.
         Or a list of numpy arrays to a piece of lyrics
 
         :param idxs: a numpy array or a list of numpy array
+        :param sep: word seperator
 
         .. code-block:: python
 
@@ -164,11 +165,11 @@ class Doc():
             return cls.__idx2word[idxs]
         elif type(idxs) is list:
             return [
-                ''.join([cls.__idx2word[idx] for idx in sentence_idxs])
+                sep.join([cls.__idx2word[idx] for idx in sentence_idxs])
                 for sentence_idxs in idxs
                 ]
         else:
-            return ''.join([cls.__idx2word[idx] for idx in idxs])
+            return sep.join([cls.__idx2word[idx] for idx in idxs])
 
     def get_origin(self):
         """:returns: the original text of this doc"""
@@ -210,13 +211,15 @@ class Doc():
         cls.__vocab = vectorizer.vocabulary_
         cls.__idx2word = {v: k for k, v in cls.__vocab.items()}
 
+        cls.__vocab['<unk>'] = vocab_size
+        cls.__idx2word[vocab_size] = '<unk>'
+
         corpus_size = len(cls.__corpus)
 
         new_corpus = []
         for doc in cls.__corpus:
-            n_word = len(doc.get_bag())
             doc.__filter()
-            if len(doc.get_bag()) / n_word > 1 - unk_percentage:
+            if np.sum(doc.bag == len(cls.__vocab)-1) / len(doc.bag) < unk_percentage:
                 new_corpus.append(doc)
 
         cls.__corpus = [doc for doc in new_corpus if len(doc.get_lines()) > 15]
@@ -231,7 +234,7 @@ class Doc():
                 child.__filter()
             self.bag = np.concatenate(self.get_lines())
         else:
-            self.bag = np.array([self.__vocab[word] for word in self.bag if word in self.__vocab])
+            self.bag = np.array([self.__vocab[word] if word in self.__vocab else len(self.__vocab)-1 for word in self.bag])
 
         self.children = [child for child in self.children]
 
@@ -242,6 +245,24 @@ class Doc():
             pickle.dump(cls.__corpus, f)
         with open(os.path.join(path_saved, 'Doc_vocab'), 'wb') as f:
             pickle.dump(cls.__vocab, f)
+
+    @classmethod
+    def dump_to_text(cls):
+
+        train_size = int(len(cls.__corpus) * 0.8)
+        valid_size = int(len(cls.__corpus) * 0.1)
+
+        def dump_to_file(filename, docs):
+            with open(os.path.join(path_saved, filename), 'w+') as f:
+                for doc in docs:
+                    for line in doc.get_lines():
+                        f.write(cls.idxs_to_text(line, sep=' '))
+                        f.write('\n')
+
+        dump_to_file('train.txt', cls.__corpus[:train_size])
+        dump_to_file('valid.txt', cls.__corpus[train_size:train_size+valid_size])
+        dump_to_file('test.txt', cls.__corpus[train_size+valid_size:])
+
 
     @classmethod
     def load(cls):
