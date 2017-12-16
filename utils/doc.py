@@ -141,7 +141,7 @@ class Doc():
             Doc.text_to_idxs('天青色等烟雨\\n而我在等你')
         """
         doc = Doc(text, tokenizer=tokenizer)
-        doc.__filter()
+        doc.filter()
         return doc.get_lines()
 
     @classmethod
@@ -161,7 +161,7 @@ class Doc():
             print(Doc.idxs_to_text(doc.get_bag()))
             print(Doc.idxs_to_text(doc.get_lines()))
         """
-        if type(idxs) is int:
+        if type(idxs) is int or type(idxs) is np.int64:
             return cls.__idx2word[idxs]
         elif type(idxs) is list:
             return [
@@ -181,7 +181,7 @@ class Doc():
 
     def get_lines(self):
         """:returns: a list of list(bag) of indexs(int) in the lyrics."""
-        return [child.get_bag() for child in self.children]
+        return [child.get_bag() for child in self.children if len(child.get_bag()) > 0]
 
     def embedding(self):
         """:returns: embedding of the doc as bag of words using pre-trained model."""
@@ -218,7 +218,7 @@ class Doc():
 
         new_corpus = []
         for doc in cls.__corpus:
-            doc.__filter()
+            doc.filter()
             if np.sum(doc.bag == len(cls.__vocab)-1) / len(doc.bag) < unk_percentage:
                 new_corpus.append(doc)
 
@@ -228,10 +228,10 @@ class Doc():
         print('Vocab size %d' % len(vectorizer.vocabulary_))
         print('Filtered %.2f%% too short or too many unks.' % (100 * (1 - len(cls.__corpus) / corpus_size)))
 
-    def __filter(self):
+    def filter(self):
         if self.children != []:
             for child in self.children:
-                child.__filter()
+                child.filter()
             self.bag = np.concatenate(self.get_lines())
         else:
             self.bag = np.array([self.__vocab[word] if word in self.__vocab else len(self.__vocab)-1 for word in self.bag])
