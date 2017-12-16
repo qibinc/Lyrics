@@ -55,7 +55,7 @@ def _generate_branches(beam_entries, generate_step_fn, branch_factor,
     all_sequences = [copy.deepcopy(entry.sequence)
                      for entry in branched_entries]
     all_states = [copy.deepcopy(entry.state) for entry in branched_entries]
-    all_scores = [entry.score for entry in branched_entries]
+    all_scores = [copy.deepcopy(entry.score) for entry in branched_entries]
   else:
     # No need to make copies if there's no branching.
     all_sequences = [entry.sequence for entry in beam_entries]
