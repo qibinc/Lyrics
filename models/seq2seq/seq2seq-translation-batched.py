@@ -195,13 +195,12 @@ def normalize_string(s):
 
 # In[5]:
 
-
 def read_langs(lang1, lang2, reverse=False):
     print("Reading lines...")
 
     # Read the file and split into lines
 #     filename = '../data/%s-%s.txt' % (lang1, lang2)
-    filename = '/home/shw/cqb/Lyrics/models/seq2seq/%s-%s.txt' % (lang1, lang2)
+    filename = '/home/shw/cqb/Lyrics/saved/%s-%s.txt' % (lang1, lang2)
     lines = open(filename).read().strip().split('\n')
 
     # Split every line into pairs and normalize
