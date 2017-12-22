@@ -1,41 +1,29 @@
-import logging
-import time, random
+import math
+import time
+import random
 import torch
 import torch.optim as optim
 import torch.nn as nn
 from torch.autograd import Variable
 from utils import Doc
-from models.seq2seq import PairGenerator
-from models.seq2seq import masked_cross_entropy
-from models.seq2seq import EncoderRNN, LuongAttnDecoderRNN
+from models.seq2seq.masked_cross_entropy import masked_cross_entropy
 
+# Choose input pairs
+from models.seq2seq.config import PairGenerator, USE_CUDA, MAX_LENGTH, MIN_LENGTH
+# Choose models
+from models.seq2seq.config import Encoder, Decoder
+# Choose model sizes
+from models.seq2seq.config import attn_model, hidden_size, n_layers, dropout, batch_size
+# Choose training parameters
+from models.seq2seq.config import learning_rate, decoder_learning_ratio, n_epochs, plot_every, print_every, evaluate_every
+
+import logging
 logging.getLogger().setLevel('INFO')
-MIN_LENGTH = 2
-MAX_LENGTH = 10
+
 pg = PairGenerator()
 pg.trim(MIN_LENGTH, MAX_LENGTH)
 random_batch = pg.random_batch
 n_words = len(Doc.get_vocab())
-
-# Configure models
-USE_CUDA = True
-attn_model = 'dot'
-hidden_size = 500
-n_layers = 2
-dropout = 0.1
-batch_size = 64
-
-# Configure training/optimization
-clip = 50.0
-teacher_forcing_ratio = 0.5
-learning_rate = 1e-4
-decoder_learning_ratio = 5.0
-n_epochs = 50000
-epoch = 0
-plot_every = 20
-print_every = 100
-evaluate_every = 1000
-
 
 # # Training
 #
@@ -54,7 +42,7 @@ evaluate_every = 1000
 # In[22]:
 
 
-def train(input_batches, input_lengths, target_batches, target_lengths, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion, max_length=MAX_LENGTH):
+def train(input_batches, input_lengths, target_batches, target_lengths, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion):
 
     # Zero gradients of both optimizers
     encoder_optimizer.zero_grad()
@@ -100,28 +88,6 @@ def train(input_batches, input_lengths, target_batches, target_lengths, encoder,
     return loss.data[0]
 
 
-# ## Running training
-#
-# With everything in place we can actually initialize a network and start training.
-#
-# To start, we initialize models, optimizers, a loss function (criterion), and set up variables for plotting and tracking progress:
-
-# In[23]:
-
-
-# Initialize models
-encoder = EncoderRNN(n_words, hidden_size, n_layers, dropout=dropout)
-decoder = LuongAttnDecoderRNN(attn_model, hidden_size, n_words, n_layers, dropout=dropout)
-
-# Initialize optimizers and criterion
-encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)
-decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate * decoder_learning_ratio)
-criterion = nn.CrossEntropyLoss()
-
-# Move models to GPU
-if USE_CUDA:
-    encoder.cuda()
-    decoder.cuda()
 
 
 # Keep track of time elapsed and running averages
@@ -224,17 +190,39 @@ def evaluate_randomly():
     evaluate_and_show(input_sentence, target_sentence)
 
 
+# ## Running training
+#
+# With everything in place we can actually initialize a network and start training.
+#
+# To start, we initialize models, optimizers, a loss function (criterion), and set up variables for plotting and tracking progress:
+
+# In[23]:
+
+
+# Initialize models
+encoder = Encoder(n_words, hidden_size, n_layers, dropout=dropout)
+decoder = Decoder(attn_model, hidden_size, n_words, n_layers, dropout=dropout)
+
+# Initialize optimizers and criterion
+encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)
+decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate * decoder_learning_ratio)
+criterion = nn.CrossEntropyLoss()
+
+# Move models to GPU
+if USE_CUDA:
+    encoder.cuda()
+    decoder.cuda()
+
 # # Putting it all together
 #
 # To actually train, we call the train function many times, printing a summary as we go.
 #
 # *Note:* If you're running this notebook you can **train, interrupt, evaluate, and come back to continue training**. Simply run the notebook starting from the following cell (running from the previous cell will reset the models).
 
-# In[ ]:
-
 
 # Begin!
 
+epoch = 0
 while epoch < n_epochs:
     epoch += 1
 
@@ -252,12 +240,11 @@ while epoch < n_epochs:
     print_loss_total += loss
     plot_loss_total += loss
 
-    print(loss)
     if epoch % print_every == 0:
         print_loss_avg = print_loss_total / print_every
         print_loss_total = 0
         print_summary = '%s (%d %d%%) %.4f' % (time_since(start, epoch / n_epochs), epoch, epoch / n_epochs * 100, print_loss_avg)
-        print(print_summary)
+        logging.info(print_summary)
 
     if epoch % evaluate_every == 0:
         evaluate_randomly()
@@ -266,5 +253,3 @@ while epoch < n_epochs:
         plot_loss_avg = plot_loss_total / plot_every
         plot_losses.append(plot_loss_avg)
         plot_loss_total = 0
-
-        print(plot_loss_avg)

@@ -6,7 +6,7 @@ from torch.autograd import Variable
 from utils import Doc, read
 
 
-class PairGenerator(object):
+class SimplePairGenerator(object):
 
     def __init__(self):
         # Load the corpus
