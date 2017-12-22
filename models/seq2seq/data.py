@@ -12,10 +12,13 @@ class PairGenerator(object):
         # Load the corpus
         Doc.load()
 
-        symbols = ['<pad>', '<sos>', '<eos>']
+        symbols = ['<PAD>', '<SOS>', '<EOS>']
         Doc.extend_vocab(symbols)
         vocab = Doc.get_vocab()
-        self.pad_token = vocab['<pad>']
+        Doc.PAD_token = vocab['<PAD>']
+        Doc.SOS_token = vocab['<SOS>']
+        Doc.EOS_token = vocab['<EOS>']
+        self.pad_token = vocab['<PAD>']
 
         # Get sentences
         assert len(vocab) == 10001 + len(symbols)
@@ -63,9 +66,7 @@ class PairGenerator(object):
 
     def pad_seq(self, seq, max_length):
         '''Pad a with the PAD symbol'''
-        return np.concatenate(
-                [seq, [self.pad_token] * (max_length - len(seq))]
-            ).astype(int).tolist()
+        return seq + [self.pad_token] * (max_length - len(seq))
 
     def random_batch(self, batch_size, use_cuda=1):
         input_seqs = []
@@ -74,9 +75,14 @@ class PairGenerator(object):
         # Choose random pairs
         for i in range(batch_size):
             pair = random.choice(range(len(self.pairs['q'])))
-            input_seqs.append(self.pairs['q'][pair])
-            target_seqs.append(self.pairs['a'][pair])
+            input_seqs.append(self.pairs['q'][pair].astype(int).tolist())
+            target_seqs.append(self.pairs['a'][pair].astype(int).tolist())
 
+        # Zip into pairs, sort by length (descending), unzip
+        seq_pairs = sorted(zip(input_seqs, target_seqs), key=lambda p: len(p[0]), reverse=True)
+        input_seqs, target_seqs = zip(*seq_pairs)
+
+        # For input and target sequences, get array of lengths and pad with 0s to max length
         input_lengths = [len(s) for s in input_seqs]
         input_padded = [self.pad_seq(s, max(input_lengths))
                         for s in input_seqs]
