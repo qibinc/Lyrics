@@ -17,7 +17,7 @@ from models.seq2seq.model import LuongAttnDecoderRNN as Decoder
 # Choose model sizes
 from models.seq2seq.config import attn_model, hidden_size, n_layers, dropout, batch_size
 # Choose training parameters
-from models.seq2seq.config import learning_rate, decoder_learning_ratio, n_epochs, plot_every, print_every, evaluate_every
+from models.seq2seq.config import learning_rate, decoder_learning_ratio, n_steps, plot_every, print_every, evaluate_every
 
 from tensorboardX import SummaryWriter
 
@@ -224,7 +224,7 @@ if USE_CUDA:
 # Begin!
 
 epoch = 0
-while epoch < n_epochs:
+while epoch < n_steps:
     epoch += 1
 
     # Get training data for this cycle
@@ -244,7 +244,7 @@ while epoch < n_epochs:
     if epoch % print_every == 0:
         print_loss_avg = print_loss_total / print_every
         print_loss_total = 0
-        print_summary = '%s (%d %d%%) %.4f' % (time_since(start, epoch / n_epochs), epoch, epoch / n_epochs * 100, print_loss_avg)
+        print_summary = '%s (%d %d%%) %.4f' % (time_since(start, epoch / n_steps), epoch, epoch / n_steps * 100, print_loss_avg)
         print(print_summary)
 
     if epoch % evaluate_every == 0:
@@ -256,4 +256,3 @@ while epoch < n_epochs:
         plot_loss_total = 0
         writer.add_scalar('loss', plot_loss_avg, epoch)
 
-writer.close()

@@ -136,11 +136,22 @@ class Attn(nn.Module):
         if USE_CUDA:
             attn_energies = attn_energies.cuda()
 
-        # For each batch of encoder outputs
-        for b in range(this_batch_size):
-            # Calculate energy for each encoder output
-            for i in range(max_len):
-                attn_energies[b, i] = self.score(hidden[:, b], encoder_outputs[i, b].unsqueeze(0))
+        # hidden: 1 * B * N
+        # encoder_outputs: MAX_LEN * B * N
+        # energies: B * MAX_LEN
+
+        #print(hidden.size())
+        #print(encoder_outputs.size())
+        if self.method == 'dot':
+            attn_energies = torch.bmm(encoder_outputs.transpose(0, 1),
+                                      hidden.permute(1, 2, 0)).squeeze(2)
+        else:
+            # too slow
+            # For each batch of encoder outputs
+            for b in range(this_batch_size):
+                # Calculate energy for each encoder output
+                for i in range(max_len):
+                    attn_energies[b, i] = self.score(hidden[:, b], encoder_outputs[i, b])
 
         # Normalize energies to weights in range 0 to 1, resize to 1 x B x S
         return F.softmax(attn_energies, dim=1).unsqueeze(1)
@@ -268,16 +279,15 @@ class LuongAttnDecoderRNN(nn.Module):
 
         # Calculate attention from current RNN state and all encoder outputs;
         # apply to encoder outputs to get weighted average
-        ## attn_weights = self.attn(rnn_output, encoder_outputs)
-        ## context = attn_weights.bmm(encoder_outputs.transpose(0, 1)) # B x S=1 x N
+        attn_weights = self.attn(rnn_output, encoder_outputs)
+        context = attn_weights.bmm(encoder_outputs.transpose(0, 1)) # B x S=1 x N
 
         # Attentional vector using the RNN hidden state and context vector
         # concatenated together (Luong eq. 5)
         rnn_output = rnn_output.squeeze(0) # S=1 x B x N -> B x N
-        ## context = context.squeeze(1)       # B x S=1 x N -> B x N
-        ## concat_input = torch.cat((rnn_output, context), 1)
-        ## concat_output = F.tanh(self.concat(concat_input))
-        concat_output = F.tanh(rnn_output)
+        context = context.squeeze(1)       # B x S=1 x N -> B x N
+        concat_input = torch.cat((rnn_output, context), 1)
+        concat_output = F.tanh(self.concat(concat_input))
 
         # Finally predict next token (Luong eq. 6, without softmax)
         output = self.out(concat_output)
