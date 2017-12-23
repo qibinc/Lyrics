@@ -69,7 +69,7 @@ def train(input_batches, input_lengths, target_batches, target_lengths, encoder,
 
     # Run through decoder one time step at a time
     for t in range(max_target_length):
-        decoder_output, decoder_hidden, decoder_attn = decoder(
+        decoder_output, decoder_hidden = decoder(
             decoder_input, decoder_hidden, encoder_outputs
         )
 
@@ -124,7 +124,7 @@ def time_since(since, percent):
 # In[25]:
 
 def evaluate(input_seq, max_length=MAX_LENGTH):
-    input_seqs = [Doc.text_to_idxs(input_seq)[0].astype(int).tolist()]
+    input_seqs = [Doc.text_to_idxs(input_seq)[0].astype(int).tolist() + [Doc.EOS_token]]
     input_lengths = [len(input_seq[0])]
     input_batches = Variable(torch.LongTensor(input_seqs), volatile=True).transpose(0, 1)
 
@@ -147,14 +147,12 @@ def evaluate(input_seq, max_length=MAX_LENGTH):
 
     # Store output words and attention states
     decoded_words = []
-    decoder_attentions = torch.zeros(max_length + 1, max_length + 1)
 
     # Run through decoder
     for di in range(max_length):
-        decoder_output, decoder_hidden, decoder_attention = decoder(
+        decoder_output, decoder_hidden = decoder(
             decoder_input, decoder_hidden, encoder_outputs
         )
-        decoder_attentions[di,:decoder_attention.size(2)] += decoder_attention.squeeze(0).squeeze(0).cpu().data
 
         # Choose top word from output
         topv, topi = decoder_output.data.topk(1)
@@ -173,11 +171,11 @@ def evaluate(input_seq, max_length=MAX_LENGTH):
     encoder.train(True)
     decoder.train(True)
 
-    return decoded_words, decoder_attentions[:di+1, :len(encoder_outputs)]
+    return decoded_words
 
 
 def evaluate_and_show(input_sentence, target_sentence=None):
-    output_words, attentions = evaluate(input_sentence)
+    output_words = evaluate(input_sentence)
     output_sentence = ' '.join(output_words)
     print('>', input_sentence)
     if target_sentence is not None:
@@ -257,3 +255,5 @@ while epoch < n_epochs:
         plot_losses.append(plot_loss_avg)
         plot_loss_total = 0
         writer.add_scalar('loss', plot_loss_avg, epoch)
+
+writer.close()

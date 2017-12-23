@@ -9,7 +9,6 @@ import torch.nn.functional as F
 from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence#, masked_cross_entropy
 from models.seq2seq.masked_cross_entropy import *
 from models.seq2seq.config import USE_CUDA
-from models.seq2seq.config import USE_CUDA
 
 
 # # Building the models
@@ -186,21 +185,21 @@ class Attn(nn.Module):
 
 
 class BahdanauAttnDecoderRNN(nn.Module):
-    def __init__(self, hidden_size, output_size, n_layers=1, dropout_p=0.1):
+    def __init__(self, hidden_size, output_size, n_layers=1, dropout=0.1):
         super(BahdanauAttnDecoderRNN, self).__init__()
 
         # Define parameters
         self.hidden_size = hidden_size
         self.output_size = output_size
         self.n_layers = n_layers
-        self.dropout_p = dropout_p
+        self.dropout = dropout
         self.max_length = max_length
 
         # Define layers
         self.embedding = nn.Embedding(output_size, hidden_size)
-        self.dropout = nn.Dropout(dropout_p)
+        self.dropout = nn.Dropout(dropout)
         self.attn = Attn('concat', hidden_size)
-        self.gru = nn.GRU(hidden_size, hidden_size, n_layers, dropout=dropout_p)
+        self.gru = nn.GRU(hidden_size, hidden_size, n_layers, dropout=dropout)
         self.out = nn.Linear(hidden_size, output_size)
 
     def forward(self, word_input, last_hidden, encoder_outputs):
@@ -225,7 +224,7 @@ class BahdanauAttnDecoderRNN(nn.Module):
         output = F.log_softmax(self.out(torch.cat((output, context), 1)), dim=1)
 
         # Return final output, hidden state, and attention weights (for visualization)
-        return output, hidden, attn_weights
+        return output, hidden
 
 
 # Now we can build a decoder that plugs this Attn module in after the RNN to calculate attention weights, and apply those weights to the encoder outputs to get a context vector.
@@ -269,18 +268,19 @@ class LuongAttnDecoderRNN(nn.Module):
 
         # Calculate attention from current RNN state and all encoder outputs;
         # apply to encoder outputs to get weighted average
-        attn_weights = self.attn(rnn_output, encoder_outputs)
-        context = attn_weights.bmm(encoder_outputs.transpose(0, 1)) # B x S=1 x N
+        ## attn_weights = self.attn(rnn_output, encoder_outputs)
+        ## context = attn_weights.bmm(encoder_outputs.transpose(0, 1)) # B x S=1 x N
 
         # Attentional vector using the RNN hidden state and context vector
         # concatenated together (Luong eq. 5)
         rnn_output = rnn_output.squeeze(0) # S=1 x B x N -> B x N
-        context = context.squeeze(1)       # B x S=1 x N -> B x N
-        concat_input = torch.cat((rnn_output, context), 1)
-        concat_output = F.tanh(self.concat(concat_input))
+        ## context = context.squeeze(1)       # B x S=1 x N -> B x N
+        ## concat_input = torch.cat((rnn_output, context), 1)
+        ## concat_output = F.tanh(self.concat(concat_input))
+        concat_output = F.tanh(rnn_output)
 
         # Finally predict next token (Luong eq. 6, without softmax)
         output = self.out(concat_output)
 
         # Return final output, hidden state, and attention weights (for visualization)
-        return output, hidden, attn_weights
+        return output, hidden

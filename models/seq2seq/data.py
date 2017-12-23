@@ -55,8 +55,8 @@ class SimplePairGenerator(object):
         self.pairs['q'] = []
         self.pairs['a'] = []
         for i in range(len(q)):
-            if min_length <= len(q[i]) and len(q[i]) <= max_length and\
-               min_length <= len(a[i]) and len(a[i]) <= max_length:
+            if min_length <= len(q[i]) and len(q[i]) < max_length and\
+               min_length <= len(a[i]) and len(a[i]) < max_length:
                 self.pairs['q'].append(q[i])
                 self.pairs['a'].append(a[i])
         print('Filtered %f' % (1 - len(self.pairs['q']) / unfiltered))
@@ -75,8 +75,8 @@ class SimplePairGenerator(object):
         # Choose random pairs
         for i in range(batch_size):
             pair = random.choice(range(len(self.pairs['q'])))
-            input_seqs.append(self.pairs['q'][pair].astype(int).tolist())
-            target_seqs.append(self.pairs['a'][pair].astype(int).tolist())
+            input_seqs.append(self.pairs['q'][pair].astype(int).tolist() + [Doc.EOS_token])
+            target_seqs.append(self.pairs['a'][pair].astype(int).tolist() + [Doc.EOS_token])
 
         # Zip into pairs, sort by length (descending), unzip
         seq_pairs = sorted(zip(input_seqs, target_seqs), key=lambda p: len(p[0]), reverse=True)
