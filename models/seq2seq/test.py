@@ -1,9 +1,10 @@
 from utils import Doc
 import torch
 from torch.autograd import Variable
-from models.seq2seq import PairGenerator
-from models.seq2seq import masked_cross_entropy
-from models.seq2seq import EncoderRNN, LuongAttnDecoderRNN
+from models.seq2seq.data import SimplePairGenerator as PairGenerator
+from models.seq2seq.masked_cross_entropy import masked_cross_entropy
+from models.seq2seq.model import EncoderRNN, LuongAttnDecoderRNN
+from models.seq2seq.config import USE_CUDA
 
 pg = PairGenerator()
 
@@ -15,7 +16,6 @@ input_batches, input_lengths, target_batches, target_lengths = random_batch(smal
 print('input_batches', input_batches.size()) # (max_len x batch_size)
 print('target_batches', target_batches.size()) # (max_len x batch_size)
 
-USE_CUDA = True
 small_hidden_size = 8
 small_n_layers = 2
 
@@ -33,7 +33,7 @@ print('encoder_hidden', encoder_hidden.size()) # n_layers * 2 x batch_size x hid
 max_target_length = max(target_lengths)
 
 # Prepare decoder input and outputs
-decoder_input = Variable(torch.LongTensor([Doc.get_vocab()['<sos>']] * small_batch_size))
+decoder_input = Variable(torch.LongTensor([Doc.get_vocab()['<SOS>']] * small_batch_size))
 decoder_hidden = encoder_hidden[:decoder_test.n_layers] # Use last (forward) hidden state from encoder
 all_decoder_outputs = Variable(torch.zeros(max_target_length, small_batch_size, decoder_test.output_size))
 

@@ -9,16 +9,19 @@ from utils import Doc
 from models.seq2seq.masked_cross_entropy import masked_cross_entropy
 
 # Choose input pairs
-from models.seq2seq.config import PairGenerator, USE_CUDA, MAX_LENGTH, MIN_LENGTH
+from models.seq2seq.data import SimplePairGenerator as PairGenerator
+from models.seq2seq.config import USE_CUDA, MAX_LENGTH, MIN_LENGTH
 # Choose models
-from models.seq2seq.config import Encoder, Decoder
+from models.seq2seq.model import EncoderRNN as Encoder
+from models.seq2seq.model import LuongAttnDecoderRNN as Decoder
 # Choose model sizes
 from models.seq2seq.config import attn_model, hidden_size, n_layers, dropout, batch_size
 # Choose training parameters
 from models.seq2seq.config import learning_rate, decoder_learning_ratio, n_epochs, plot_every, print_every, evaluate_every
 
-import logging
-logging.getLogger().setLevel('INFO')
+from tensorboardX import SummaryWriter
+
+writer = SummaryWriter()
 
 pg = PairGenerator()
 pg.trim(MIN_LENGTH, MAX_LENGTH)
@@ -121,8 +124,8 @@ def time_since(since, percent):
 # In[25]:
 
 def evaluate(input_seq, max_length=MAX_LENGTH):
-    input_lengths = [len(input_seq)]
     input_seqs = [Doc.text_to_idxs(input_seq)[0].astype(int).tolist()]
+    input_lengths = [len(input_seq[0])]
     input_batches = Variable(torch.LongTensor(input_seqs), volatile=True).transpose(0, 1)
 
     if USE_CUDA:
@@ -244,7 +247,7 @@ while epoch < n_epochs:
         print_loss_avg = print_loss_total / print_every
         print_loss_total = 0
         print_summary = '%s (%d %d%%) %.4f' % (time_since(start, epoch / n_epochs), epoch, epoch / n_epochs * 100, print_loss_avg)
-        logging.info(print_summary)
+        print(print_summary)
 
     if epoch % evaluate_every == 0:
         evaluate_randomly()
@@ -253,3 +256,4 @@ while epoch < n_epochs:
         plot_loss_avg = plot_loss_total / plot_every
         plot_losses.append(plot_loss_avg)
         plot_loss_total = 0
+        writer.add_scalar('loss', plot_loss_avg, epoch)

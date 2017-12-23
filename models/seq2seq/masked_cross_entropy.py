@@ -1,6 +1,7 @@
 import torch
 from torch.nn import functional
 from torch.autograd import Variable
+from models.seq2seq.config import USE_CUDA
 
 def sequence_mask(sequence_length, max_len=None):
     if max_len is None:
@@ -17,7 +18,9 @@ def sequence_mask(sequence_length, max_len=None):
 
 
 def masked_cross_entropy(logits, target, length):
-    length = Variable(torch.LongTensor(length)).cuda()
+    length = Variable(torch.LongTensor(length))
+    if USE_CUDA:
+        length = length.cuda()
 
     """
     Args:
@@ -37,7 +40,7 @@ def masked_cross_entropy(logits, target, length):
     # logits_flat: (batch * max_len, num_classes)
     logits_flat = logits.view(-1, logits.size(-1))
     # log_probs_flat: (batch * max_len, num_classes)
-    log_probs_flat = functional.log_softmax(logits_flat)
+    log_probs_flat = functional.log_softmax(logits_flat, dim=1)
     # target_flat: (batch * max_len, 1)
     target_flat = target.view(-1, 1)
     # losses_flat: (batch * max_len, 1)

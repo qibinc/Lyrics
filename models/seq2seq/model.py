@@ -8,6 +8,8 @@ from torch import optim
 import torch.nn.functional as F
 from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence#, masked_cross_entropy
 from models.seq2seq.masked_cross_entropy import *
+from models.seq2seq.config import USE_CUDA
+from models.seq2seq.config import USE_CUDA
 
 
 # # Building the models
@@ -132,7 +134,8 @@ class Attn(nn.Module):
         # Create variable to store attention energies
         attn_energies = Variable(torch.zeros(this_batch_size, max_len)) # B x S
 
-        attn_energies = attn_energies.cuda()
+        if USE_CUDA:
+            attn_energies = attn_energies.cuda()
 
         # For each batch of encoder outputs
         for b in range(this_batch_size):
@@ -141,7 +144,7 @@ class Attn(nn.Module):
                 attn_energies[b, i] = self.score(hidden[:, b], encoder_outputs[i, b].unsqueeze(0))
 
         # Normalize energies to weights in range 0 to 1, resize to 1 x B x S
-        return F.softmax(attn_energies).unsqueeze(1)
+        return F.softmax(attn_energies, dim=1).unsqueeze(1)
 
     def score(self, hidden, encoder_output):
 
@@ -219,7 +222,7 @@ class BahdanauAttnDecoderRNN(nn.Module):
 
         # Final output layer
         output = output.squeeze(0) # B x N
-        output = F.log_softmax(self.out(torch.cat((output, context), 1)))
+        output = F.log_softmax(self.out(torch.cat((output, context), 1)), dim=1)
 
         # Return final output, hidden state, and attention weights (for visualization)
         return output, hidden, attn_weights

@@ -1,9 +1,9 @@
-import logging
 import random
 import numpy as np
 import torch
 from torch.autograd import Variable
 from utils import Doc, read
+from models.seq2seq.config import USE_CUDA
 
 
 class SimplePairGenerator(object):
@@ -32,7 +32,7 @@ class SimplePairGenerator(object):
              for line in list_of_list_of_lines for second in line[1:]]
 
         assert len(q) == len(a)
-        logging.info('%d pairs generated' % len(q))
+        print('%d pairs generated' % len(q))
 
         # shuffle them
         idxs = list(range(len(q)))
@@ -59,7 +59,7 @@ class SimplePairGenerator(object):
                min_length <= len(a[i]) and len(a[i]) <= max_length:
                 self.pairs['q'].append(q[i])
                 self.pairs['a'].append(a[i])
-        logging.info('Filtered %f' % (1 - len(self.pairs['q']) / unfiltered))
+        print('Filtered %f' % (1 - len(self.pairs['q']) / unfiltered))
 
     def get(self):
         return self.pairs
@@ -68,7 +68,7 @@ class SimplePairGenerator(object):
         '''Pad a with the PAD symbol'''
         return seq + [self.pad_token] * (max_length - len(seq))
 
-    def random_batch(self, batch_size, use_cuda=1):
+    def random_batch(self, batch_size):
         input_seqs = []
         target_seqs = []
 
@@ -95,7 +95,7 @@ class SimplePairGenerator(object):
         input_var = Variable(torch.LongTensor(input_padded)).transpose(0, 1)
         target_var = Variable(torch.LongTensor(target_padded)).transpose(0, 1)
 
-        if use_cuda:
+        if USE_CUDA:
             input_var = input_var.cuda()
             target_var = target_var.cuda()
 
