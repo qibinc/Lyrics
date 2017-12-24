@@ -223,9 +223,12 @@ if USE_CUDA:
 
 # Begin!
 
-epoch = 0
-while epoch < n_steps:
-    epoch += 1
+
+visualize_num = 1000
+visualize_list = random.sample(range(n_words), visualize_num)
+step = 0
+while step < n_steps:
+    step += 1
 
     # Get training data for this cycle
     input_batches, input_lengths, target_batches, target_lengths = random_batch(batch_size)
@@ -241,18 +244,23 @@ while epoch < n_steps:
     print_loss_total += loss
     plot_loss_total += loss
 
-    if epoch % print_every == 0:
+    if step % print_every == 0:
         print_loss_avg = print_loss_total / print_every
         print_loss_total = 0
-        print_summary = '%s (%d %d%%) %.4f' % (time_since(start, epoch / n_steps), epoch, epoch / n_steps * 100, print_loss_avg)
+        print_summary = '%s (%d %d%%) %.4f' % (time_since(start, step / n_steps), step, step / n_steps * 100, print_loss_avg)
         print(print_summary)
 
-    if epoch % evaluate_every == 0:
+    if step % evaluate_every == 0:
         evaluate_randomly()
+        writer.add_embedding(list(encoder.embedding.parameters())[0].data[visualize_list],
+                             Doc.idxs_to_text([[idx] for idx in visualize_list]),
+                             global_step=step, tag='Word Embeddings')
 
-    if epoch % plot_every == 0:
+    if step % plot_every == 0:
         plot_loss_avg = plot_loss_total / plot_every
         plot_losses.append(plot_loss_avg)
         plot_loss_total = 0
-        writer.add_scalar('loss', plot_loss_avg, epoch)
+        writer.add_scalar('loss', plot_loss_avg, step)
+
+writer.close()
 
