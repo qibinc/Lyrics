@@ -12,3 +12,6 @@
 
 # idea
 **/.idea/
+
+# tensorboard
+**/runs/
