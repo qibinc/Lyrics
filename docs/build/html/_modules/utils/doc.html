@@ -221,7 +221,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">bag</span>
 
 <div class="viewcode-block" id="Doc.load_corpus"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.load_corpus">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">load_corpus</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">lyrics</span><span class="p">,</span> <span class="n">vocab_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">unk_percentage</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s1">&#39;word&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_corpus</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">lyrics</span><span class="p">,</span> <span class="n">vocab_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">unk_percentage</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s1">&#39;word&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load from lyrics read by utils.data.read()</span>
 
 <span class="sd">        :param lyrics: a list of original lyrics texts</span>
@@ -286,7 +286,7 @@
 <div class="viewcode-block" id="Doc.text_to_idxs"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.text_to_idxs">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">text_to_idxs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s1">&#39;word&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the idxs of given text</span>
-<span class="sd">        </span>
+
 <span class="sd">        :param text: the text in string format</span>
 
 <span class="sd">        .. code-block:: python</span>
@@ -296,17 +296,18 @@
 <span class="sd">            Doc.text_to_idxs(&#39;天青色等烟雨\\n而我在等你&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="n">Doc</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
-        <span class="n">doc</span><span class="o">.</span><span class="n">__filter</span><span class="p">()</span>
+        <span class="n">doc</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">get_lines</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Doc.idxs_to_text"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.idxs_to_text">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">idxs_to_text</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">idxs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">idxs_to_text</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">idxs</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the text of idxs.</span>
 
 <span class="sd">        Convert a numpy array to a sentence.</span>
 <span class="sd">        Or a list of numpy arrays to a piece of lyrics</span>
 
 <span class="sd">        :param idxs: a numpy array or a list of numpy array</span>
+<span class="sd">        :param sep: word seperator</span>
 
 <span class="sd">        .. code-block:: python</span>
 
@@ -315,15 +316,15 @@
 <span class="sd">            print(Doc.idxs_to_text(doc.get_bag()))</span>
 <span class="sd">            print(Doc.idxs_to_text(doc.get_lines()))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">idxs</span><span class="p">]</span>
         <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span>
-                <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sentence_idxs</span><span class="p">])</span>
+                <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sentence_idxs</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">sentence_idxs</span> <span class="ow">in</span> <span class="n">idxs</span>
                 <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">])</span></div>
+            <span class="k">return</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Doc.get_origin"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.get_origin">[docs]</a>    <span class="k">def</span> <span class="nf">get_origin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:returns: the original text of this doc&quot;&quot;&quot;</span>
@@ -335,7 +336,7 @@
 
 <div class="viewcode-block" id="Doc.get_lines"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.get_lines">[docs]</a>    <span class="k">def</span> <span class="nf">get_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:returns: a list of list(bag) of indexs(int) in the lyrics.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">child</span><span class="o">.</span><span class="n">get_bag</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">child</span><span class="o">.</span><span class="n">get_bag</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">get_bag</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Doc.embedding"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.embedding">[docs]</a>    <span class="k">def</span> <span class="nf">embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:returns: embedding of the doc as bag of words using pre-trained model.&quot;&quot;&quot;</span>
@@ -365,13 +366,15 @@
         <span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">vocabulary_</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
+        <span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span><span class="p">[</span><span class="s1">&#39;&lt;unk&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vocab_size</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">__idx2word</span><span class="p">[</span><span class="n">vocab_size</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;unk&gt;&#39;</span>
+
         <span class="n">corpus_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">)</span>
 
         <span class="n">new_corpus</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">:</span>
-            <span class="n">n_word</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">get_bag</span><span class="p">())</span>
-            <span class="n">doc</span><span class="o">.</span><span class="n">__filter</span><span class="p">()</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">get_bag</span><span class="p">())</span> <span class="o">/</span> <span class="n">n_word</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">unk_percentage</span><span class="p">:</span>
+            <span class="n">doc</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">bag</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">bag</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">unk_percentage</span><span class="p">:</span>
                 <span class="n">new_corpus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">new_corpus</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">get_lines</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">15</span><span class="p">]</span>
@@ -380,15 +383,15 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Vocab size </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">vocabulary_</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Filtered </span><span class="si">%.2f%%</span><span class="s1"> too short or too many unks.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">)</span> <span class="o">/</span> <span class="n">corpus_size</span><span class="p">)))</span>
 
-    <span class="k">def</span> <span class="nf">__filter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Doc.filter"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">!=</span> <span class="p">[]:</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
-                <span class="n">child</span><span class="o">.</span><span class="n">__filter</span><span class="p">()</span>
+                <span class="n">child</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_lines</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__vocab</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vocab</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__vocab</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vocab</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__vocab</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag</span><span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">child</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">child</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Doc.dump"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.dump">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -397,6 +400,24 @@
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_saved</span><span class="p">,</span> <span class="s1">&#39;Doc_vocab&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__vocab</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Doc.dump_to_text"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.dump_to_text">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">dump_to_text</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+
+        <span class="n">train_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span>
+        <span class="n">valid_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dump_to_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">docs</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_saved</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">get_lines</span><span class="p">():</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">idxs_to_text</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">))</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">dump_to_file</span><span class="p">(</span><span class="s1">&#39;train.txt&#39;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">[:</span><span class="n">train_size</span><span class="p">])</span>
+        <span class="n">dump_to_file</span><span class="p">(</span><span class="s1">&#39;valid.txt&#39;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">[</span><span class="n">train_size</span><span class="p">:</span><span class="n">train_size</span><span class="o">+</span><span class="n">valid_size</span><span class="p">])</span>
+        <span class="n">dump_to_file</span><span class="p">(</span><span class="s1">&#39;test.txt&#39;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__corpus</span><span class="p">[</span><span class="n">train_size</span><span class="o">+</span><span class="n">valid_size</span><span class="p">:])</span></div>
+
 
 <div class="viewcode-block" id="Doc.load"><a class="viewcode-back" href="../../utils.html#utils.doc.Doc.load">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>

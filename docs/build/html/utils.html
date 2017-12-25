@@ -212,7 +212,7 @@
 </div>
 <dl class="classmethod">
 <dt id="utils.doc.Doc.load_corpus">
-<em class="property">classmethod </em><code class="descname">load_corpus</code><span class="sig-paren">(</span><em>lyrics</em>, <em>vocab_size=10000</em>, <em>unk_percentage=0.08</em>, <em>tokenizer='word'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.load_corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.load_corpus" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">load_corpus</code><span class="sig-paren">(</span><em>lyrics</em>, <em>vocab_size=10000</em>, <em>unk_percentage=0.05</em>, <em>tokenizer='word'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.load_corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.load_corpus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load from lyrics read by utils.data.read()</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -301,7 +301,7 @@
 
 <dl class="classmethod">
 <dt id="utils.doc.Doc.idxs_to_text">
-<em class="property">classmethod </em><code class="descname">idxs_to_text</code><span class="sig-paren">(</span><em>idxs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.idxs_to_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.idxs_to_text" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">idxs_to_text</code><span class="sig-paren">(</span><em>idxs</em>, <em>sep=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.idxs_to_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.idxs_to_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the text of idxs.</p>
 <p>Convert a numpy array to a sentence.
 Or a list of numpy arrays to a piece of lyrics</p>
@@ -309,7 +309,11 @@ Or a list of numpy arrays to a piece of lyrics</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>idxs</strong> – a numpy array or a list of numpy array</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>idxs</strong> – a numpy array or a list of numpy array</li>
+<li><strong>sep</strong> – word seperator</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -386,11 +390,21 @@ Or a list of numpy arrays to a piece of lyrics</p>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="utils.doc.Doc.filter">
+<code class="descname">filter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="classmethod">
 <dt id="utils.doc.Doc.dump">
 <em class="property">classmethod </em><code class="descname">dump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">Save</span> <span class="pre">everything</span> <span class="pre">and</span> <span class="pre">next</span> <span class="pre">time</span> <span class="pre">use</span> <span class="pre">load()</span> <span class="pre">instead</span> <span class="pre">of</span> <span class="pre">load_corpus()</span> <span class="pre">to</span> <span class="pre">save</span> <span class="pre">time!!</span></code></p>
 </dd></dl>
+
+<dl class="classmethod">
+<dt id="utils.doc.Doc.dump_to_text">
+<em class="property">classmethod </em><code class="descname">dump_to_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/doc.html#Doc.dump_to_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.doc.Doc.dump_to_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="classmethod">
 <dt id="utils.doc.Doc.load">
