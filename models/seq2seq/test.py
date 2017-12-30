@@ -10,8 +10,9 @@ pg = PairGenerator()
 
 random_batch = pg.random_batch
 pg.trim(2, 10)
+pg.separate()
 small_batch_size = 3
-input_batches, input_lengths, target_batches, target_lengths = random_batch(small_batch_size)
+input_batches, input_lengths, target_batches, target_lengths = random_batch(small_batch_size,'test')
 
 print('input_batches', input_batches.size()) # (max_len x batch_size)
 print('target_batches', target_batches.size()) # (max_len x batch_size)

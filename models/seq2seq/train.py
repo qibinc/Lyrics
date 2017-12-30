@@ -25,6 +25,7 @@ writer = SummaryWriter()
 
 pg = PairGenerator()
 pg.trim(MIN_LENGTH, MAX_LENGTH)
+pg.separate()
 random_batch = pg.random_batch
 n_words = len(Doc.get_vocab())
 
@@ -185,9 +186,16 @@ def evaluate_and_show(input_sentence, target_sentence=None):
 
 # We can evaluate random sentences from the training set and print out the input, target, and output to make some subjective quality judgements:
 def evaluate_randomly():
-    idx = random.choice(range(len(pg.pairs['q'])))
-    input_sentence = Doc.idxs_to_text(pg.pairs['q'][idx])
-    target_sentence = Doc.idxs_to_text(pg.pairs['a'][idx])
+    print('Training sets:')
+    idx = random.choice(range(len(pg.train_pairs['q'])))
+    input_sentence = Doc.idxs_to_text(pg.train_pairs['q'][idx])
+    target_sentence = Doc.idxs_to_text(pg.train_pairs['a'][idx])
+    evaluate_and_show(input_sentence, target_sentence)
+    
+    print('Test sets:')
+    idx = random.choice(range(len(pg.test_pairs['q'])))
+    input_sentence = Doc.idxs_to_text(pg.test_pairs['q'][idx])
+    target_sentence = Doc.idxs_to_text(pg.test_pairs['a'][idx])
     evaluate_and_show(input_sentence, target_sentence)
 
 
@@ -231,7 +239,7 @@ while step < n_steps:
     step += 1
 
     # Get training data for this cycle
-    input_batches, input_lengths, target_batches, target_lengths = random_batch(batch_size)
+    input_batches, input_lengths, target_batches, target_lengths = random_batch(batch_size,'train')
 
     # Run the train function
     loss = train(

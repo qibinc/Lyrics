@@ -61,22 +61,59 @@ class SimplePairGenerator(object):
                 self.pairs['a'].append(a[i])
         print('Filtered %f' % (1 - len(self.pairs['q']) / unfiltered))
 
-    def get(self):
-        return self.pairs
 
+    def separate(self, val_r = 0.1, test_r = 0.1):
+        '''Please trim the pairs before separating'''
+        pairs_num = len(self.pairs['q'])
+        self.train_pairs = {
+            'q': self.pairs['q'][:int((1-val_r-test_r)*pairs_num)],
+            'a': self.pairs['a'][:int((1-val_r-test_r)*pairs_num)],
+        }
+        self.val_pairs = {
+            'q': self.pairs['q'][int((1-val_r-test_r)*pairs_num):int((1-test_r)*pairs_num)],
+            'a': self.pairs['a'][int((1-val_r-test_r)*pairs_num):int((1-test_r)*pairs_num)],
+        }
+        self.test_pairs = {
+            'q': self.pairs['q'][int((1-test_r)*pairs_num):],
+            'a': self.pairs['a'][int((1-test_r)*pairs_num):],
+        }
+        print("Separate pairs into train, val, and test set")
+    
+    def get(self, mode = 'total'):
+        print("Get ",mode," pairs")
+        if mode == 'total':
+            return self.pairs
+        elif mode == 'train':
+            return self.train_pairs  
+        elif mode == 'val':
+            return self.val_pairs
+        elif mode == 'test':
+            return self.test_pairs
+        else: 
+            print("wrong mode of getting pairs!")
+            
+           
     def pad_seq(self, seq, max_length):
         '''Pad a with the PAD symbol'''
         return seq + [self.pad_token] * (max_length - len(seq))
 
-    def random_batch(self, batch_size):
+    def random_batch(self, batch_size, mode = 'train'):
         input_seqs = []
         target_seqs = []
-
+        if mode == 'train':
+            pairs = self.train_pairs
+        elif mode == 'val':
+            pairs = self.val_pairs
+        elif mode == 'test':
+            pairs = self.test_pairs
+        else:
+            print('Wrong mode in generating random batch')
+            pairs = []
         # Choose random pairs
         for i in range(batch_size):
-            pair = random.choice(range(len(self.pairs['q'])))
-            input_seqs.append(self.pairs['q'][pair].astype(int).tolist() + [Doc.EOS_token])
-            target_seqs.append(self.pairs['a'][pair].astype(int).tolist() + [Doc.EOS_token])
+            pair = random.choice(range(len(pairs['q'])))
+            input_seqs.append(pairs['q'][pair].astype(int).tolist() + [Doc.EOS_token])
+            target_seqs.append(pairs['a'][pair].astype(int).tolist() + [Doc.EOS_token])
 
         # Zip into pairs, sort by length (descending), unzip
         seq_pairs = sorted(zip(input_seqs, target_seqs), key=lambda p: len(p[0]), reverse=True)
