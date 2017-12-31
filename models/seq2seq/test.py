@@ -44,7 +44,7 @@ if USE_CUDA:
 
 # Run through decoder one time step at a time
 for t in range(max_target_length):
-    decoder_output, decoder_hidden, decoder_attn = decoder_test(
+    decoder_output, decoder_hidden = decoder_test(
         decoder_input, decoder_hidden, encoder_outputs
     )
     all_decoder_outputs[t] = decoder_output # Store this step's outputs
