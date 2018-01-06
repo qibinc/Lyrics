@@ -2,6 +2,7 @@
 MIN_LENGTH = 2
 MAX_LENGTH = 10
 USE_CUDA = True
+TEMPRETURE = 1
 
 # Configure models
 attn_model = 'dot' # align models: dot / general / concat. Only dot is vectorized.

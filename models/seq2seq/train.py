@@ -4,13 +4,14 @@ import random
 import torch
 import torch.optim as optim
 import torch.nn as nn
+import numpy as np
 from torch.autograd import Variable
 from utils import Doc
 from models.seq2seq.masked_cross_entropy import masked_cross_entropy
 
 # Choose input pairs
 from models.seq2seq.data import SimplePairGenerator as PairGenerator
-from models.seq2seq.config import USE_CUDA, MAX_LENGTH, MIN_LENGTH
+from models.seq2seq.config import USE_CUDA, MAX_LENGTH, MIN_LENGTH,TEMPRETURE
 # Choose models
 from models.seq2seq.model import EncoderRNN as Encoder
 from models.seq2seq.model import LuongAttnDecoderRNN as Decoder
@@ -55,7 +56,6 @@ def train(input_batches, input_lengths, target_batches, target_lengths, encoder,
 
     # Run words through encoder
     encoder_outputs, encoder_hidden = encoder(input_batches, input_lengths, None)
-
     # Prepare input and output variables
     decoder_input = Variable(torch.LongTensor([Doc.SOS_token] * batch_size))
     decoder_hidden = encoder_hidden[:decoder.n_layers] # Use last (forward) hidden state from encoder
@@ -148,6 +148,7 @@ def evaluate(input_seq, max_length=MAX_LENGTH):
 
     # Store output words and attention states
     decoded_words = []
+   
 
     # Run through decoder
     for di in range(max_length):
@@ -155,9 +156,14 @@ def evaluate(input_seq, max_length=MAX_LENGTH):
             decoder_input, decoder_hidden, encoder_outputs
         )
 
+        # Choose word by sampling
+        print('Choose word by sampling with tempreture ',TEMPRETURE)
+        word_weights = decoder_output.data.div(TEMPRETURE).exp().cpu()
+        ni = torch.multinomial(word_weights, 1)[0][0]
         # Choose top word from output
-        topv, topi = decoder_output.data.topk(1)
-        ni = topi[0][0]
+        #print('Choose top word')
+        #topv, topi = decoder_output.data.topk(1)
+        #ni = topi[0][0]
         if ni == Doc.EOS_token:
             decoded_words.append('<EOS>')
             break
@@ -182,6 +188,17 @@ def evaluate_and_show(input_sentence, target_sentence=None):
     if target_sentence is not None:
         print('=', target_sentence)
     print('<', output_sentence)
+
+def evaluate_lines(num=5):
+    print('Training sets:')
+    idx = random.choice(range(len(pg.train_pairs['q'])))
+    input_sentence = Doc.idxs_to_text(pg.train_pairs['q'][idx])
+    print(input_sentence)
+    for i in range(num):
+        output_words = evaluate(input_sentence)
+        output_sentence = ' '.join(output_words)
+        print('<', output_sentence)
+        input_sentence = output_sentence
 
 
 # We can evaluate random sentences from the training set and print out the input, target, and output to make some subjective quality judgements:
@@ -270,5 +287,16 @@ while step < n_steps:
         plot_loss_total = 0
         writer.add_scalar('loss', plot_loss_avg, step)
 
+import datetime
+now = datetime.datetime.now()
+now_time = now.strftime('%Y-%m-%d %H:%M:%S')
+
+torch.save(encoder, './enc_params'+now_time+'.pkl')
+#encoder = torch.load('./enc_params.pkl'))
+
+torch.save(decoder, './dec_params'+now_time+'.pkl')
+#decoder = torch.load('./dec_params.pkl'))
+print('Model saved')
+        
 writer.close()
 
