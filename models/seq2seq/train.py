@@ -148,8 +148,40 @@ def evaluate(input_seq, max_length=MAX_LENGTH):
 
     # Store output words and attention states
     decoded_words = []
-   
+    
+    #Run through beam search decoder
+    #print('Choose word by beam search')
+    from models.beam_search import beam_search
+    def generate_step_fn(sequences, states, scores):
+        new_sequences, new_states, new_scores = [], [], []
+        for sequence, state, score in zip(sequences, states, scores):
+            #for attn model, we add encoder_outputs
+            output, state = decoder(sequence[-1].view(-1, 1), state, encoder_outputs)
+            word_weights = output.squeeze().data.div(TEMPRETURE).exp().cpu()
+            word_idx = torch.multinomial(word_weights, 1)[0]
 
+            new_token = Variable(torch.LongTensor([word_idx]).view(-1, 1))
+            if USE_CUDA:
+                new_token.data = new_token.data.cuda()
+            new_sequences.append(torch.cat([sequence, new_token]))
+            new_states.append(state)
+            new_scores.append(score + np.log(word_weights[word_idx] / torch.sum(word_weights)))
+        return new_sequences, new_states, new_scores
+
+    selected = beam_search(initial_sequence=decoder_input, initial_state=decoder_hidden,\
+                           generate_step_fn = generate_step_fn, num_steps = 100,\
+                           beam_size=5, branch_factor=1, steps_per_iteration=1)
+
+    sequence, state, score = selected
+    # print(sequence.data)
+    for word_idx in sequence.data:
+        if word_idx[0] == Doc.EOS_token:
+            decoded_words.append('<EOS>')
+            break
+        else:
+            decoded_words.append(Doc.idxs_to_text(word_idx))
+       
+    '''
     # Run through decoder
     for di in range(max_length):
         decoder_output, decoder_hidden = decoder(
@@ -173,7 +205,7 @@ def evaluate(input_seq, max_length=MAX_LENGTH):
         # Next input is chosen word
         decoder_input = Variable(torch.LongTensor([ni]))
         if USE_CUDA: decoder_input = decoder_input.cuda()
-
+    '''
     # Set back to training mode
     encoder.train(True)
     decoder.train(True)
